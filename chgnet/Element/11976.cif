@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Ti11CoN12
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.20141955
+_cell_length_b   6.00127495
+_cell_length_c   7.35193214
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.11375998
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Ti11CoN12
+_chemical_formula_sum   'Ti11 Co1 N12'
+_cell_volume   229.49120378
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ti  Ti0  1  0.50176147  0.25024022  0.00549537  1
+  Ti  Ti1  1  0.32134476  0.00002879  0.67266886  1
+  Ti  Ti2  1  0.16665765  0.74585992  0.33329591  1
+  Ti  Ti3  1  0.50192597  0.74977837  0.00539438  1
+  Ti  Ti4  1  0.34514406  0.50004016  0.67180808  1
+  Ti  Ti5  1  0.01198855  -0.00002879  0.99399783  1
+  Ti  Ti6  1  0.83157184  0.74975971  0.66117132  1
+  Ti  Ti7  1  0.98818925  0.49995978  0.99485855  1
+  Ti  Ti8  1  0.16667567  0.25414001  0.33337071  1
+  Ti  Ti9  1  0.83140734  0.25022162  0.66127231  1
+  Ti  Ti10  1  0.66666663  0.00000000  0.33333331  1
+  Co  Co11  1  0.66666663  0.49999997  0.33333331  1
+  N  N12  1  0.16667141  0.25227274  0.83332236  1
+  N  N13  1  0.49651864  0.24685811  0.50156009  1
+  N  N14  1  0.33277700  -0.00001308  0.16840738  1
+  N  N15  1  0.16666189  0.74772725  0.83334426  1
+  N  N16  1  0.49669249  0.75297430  0.50151023  1
+  N  N17  1  0.32846774  0.49999234  0.16488746  1
+  N  N18  1  0.83664079  0.24702563  0.16515640  1
+  N  N19  1  0.66666669  0.00000000  0.83333331  1
+  N  N20  1  0.00055631  0.00001308  0.49825928  1
+  N  N21  1  0.83681464  0.75314182  0.16510654  1
+  N  N22  1  0.66666669  0.49999997  0.83333331  1
+  N  N23  1  0.00486557  0.50000760  0.50177920  1

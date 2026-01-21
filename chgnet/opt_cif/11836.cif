@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Ti11CrN12
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   4.21582758
+_cell_length_b   6.02528575
+_cell_length_c   10.45678099
+_cell_angle_alpha   89.99944360
+_cell_angle_beta   90.00074541
+_cell_angle_gamma   90.00121497
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Ti11CrN12
+_chemical_formula_sum   'Ti11 Cr1 N12'
+_cell_volume   265.61861065
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ti  Ti0  1  0.06247274  0.16751688  0.83057658  1
+  Ti  Ti1  1  0.56227217  0.83416340  0.16665282  1
+  Ti  Ti2  1  0.56252106  0.33389155  0.99683806  1
+  Ti  Ti3  1  0.06318087  0.16919626  0.16672792  1
+  Ti  Ti4  1  0.06207042  0.66793135  0.33538092  1
+  Ti  Ti5  1  0.06260641  0.16756553  0.50286339  1
+  Ti  Ti6  1  0.06262511  0.66068578  0.66663677  1
+  Ti  Ti7  1  0.06253507  0.66791907  -0.00207742  1
+  Ti  Ti8  1  0.56287969  0.33381275  0.33661757  1
+  Ti  Ti9  1  0.56259331  0.83318274  0.50350437  1
+  Ti  Ti10  1  0.56257503  0.83317860  0.82976533  1
+  Cr  Cr11  1  0.56260737  0.33175215  0.66663575  1
+  N  N12  1  0.56214093  0.17161403  0.16676944  1
+  N  N13  1  0.56293304  0.66875113  0.33589095  1
+  N  N14  1  0.56251884  0.17058745  0.50685385  1
+  N  N15  1  0.56248957  0.64915812  0.66666230  1
+  N  N16  1  0.56261819  0.17058003  0.82653414  1
+  N  N17  1  0.56241806  0.66866769  -0.00256876  1
+  N  N18  1  0.06274509  0.83353428  0.16662259  1
+  N  N19  1  0.06235477  0.33284851  0.33517243  1
+  N  N20  1  0.06257358  0.83397639  0.50296864  1
+  N  N21  1  0.06246728  0.33138441  0.66672224  1
+  N  N22  1  0.06254719  0.83395706  0.83034818  1
+  N  N23  1  0.06245712  0.33274061  0.99821560  1

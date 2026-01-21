@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_Al3Si(CN)2
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.89836037
+_cell_length_b   5.91824424
+_cell_length_c   6.36980124
+_cell_angle_alpha   103.78325070
+_cell_angle_beta   103.98563393
+_cell_angle_gamma   55.72842742
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Al3Si(CN)2
+_chemical_formula_sum   'Al6 Si2 C4 N4'
+_cell_volume   176.85070702
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.82957408  0.19090537  0.76081172  1
+  Al  Al1  1  0.84474700  0.16299894  0.25277625  1
+  Al  Al2  1  0.32780342  0.67435841  0.48955165  1
+  Al  Al3  1  0.34354366  0.67016499  0.01157118  1
+  Al  Al4  1  0.41867699  0.08389561  0.37500780  1
+  Al  Al5  1  0.42970873  0.08057497  0.88810765  1
+  Si  Si6  1  0.91304621  0.57921484  0.62357129  1
+  Si  Si7  1  0.91161230  0.58805439  0.12608112  1
+  C  C8  1  0.65421704  0.95679354  0.65333144  1
+  C  C9  1  0.12950316  0.48250559  0.90564839  1
+  C  C10  1  0.72676374  0.39856768  0.52440766  1
+  C  C11  1  0.22254465  0.88630013  0.77166498  1
+  N  N12  1  0.66271441  0.95579346  0.15886813  1
+  N  N13  1  0.12251259  0.48458237  0.39170715  1
+  N  N14  1  0.73600682  0.40732535  0.04346031  1
+  N  N15  1  0.22702519  0.89796437  0.27343323  1

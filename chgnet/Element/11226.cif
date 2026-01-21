@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Ti11ReN12
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.20908242
+_cell_length_b   6.01045288
+_cell_length_c   7.37664874
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.01409783
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Ti11ReN12
+_chemical_formula_sum   'Ti11 Re1 N12'
+_cell_volume   230.95507862
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ti  Ti0  1  0.49979019  0.24732200  0.00294465  1
+  Ti  Ti1  1  0.32084876  0.00000000  0.67022340  1
+  Ti  Ti2  1  0.16666666  0.74896112  0.33333331  1
+  Ti  Ti3  1  0.49979019  0.75267799  0.00294465  1
+  Ti  Ti4  1  0.34487123  0.49999997  0.67150228  1
+  Ti  Ti5  1  0.01248455  0.00000000  0.99644329  1
+  Ti  Ti6  1  0.83354312  0.75267793  0.66372204  1
+  Ti  Ti7  1  0.98846208  0.49999997  0.99516435  1
+  Ti  Ti8  1  0.16666666  0.25103881  0.33333331  1
+  Ti  Ti9  1  0.83354312  0.24732200  0.66372204  1
+  Ti  Ti10  1  0.66666663  0.00000000  0.33333331  1
+  Re  Re11  1  0.66666663  0.49999997  0.33333331  1
+  N  N12  1  0.16666666  0.25169520  0.83333331  1
+  N  N13  1  0.49623187  0.24485826  0.50240583  1
+  N  N14  1  0.33499091  0.00000000  0.16951959  1
+  N  N15  1  0.16666664  0.74830479  0.83333331  1
+  N  N16  1  0.49623187  0.75514167  0.50240583  1
+  N  N17  1  0.32555380  0.49999997  0.16333055  1
+  N  N18  1  0.83710141  0.24485826  0.16426080  1
+  N  N19  1  0.66666669  0.00000000  0.83333331  1
+  N  N20  1  0.99834240  0.00000000  0.49714707  1
+  N  N21  1  0.83710141  0.75514167  0.16426080  1
+  N  N22  1  0.66666669  0.49999997  0.83333331  1
+  N  N23  1  0.00777951  0.49999997  0.50333611  1

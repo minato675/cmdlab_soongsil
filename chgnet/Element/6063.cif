@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_AlSiN2
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   8.77683770
+_cell_length_b   9.41855197
+_cell_length_c   2.97963733
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   136.93165010
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   AlSiN2
+_chemical_formula_sum   'Al4 Si4 N8'
+_cell_volume   168.19917269
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.13398734  0.85192929  0.50000000  1
+  Al  Al1  1  0.06038854  0.50955286  0.00000000  1
+  Al  Al2  1  0.28085901  0.23737408  0.00000000  1
+  Al  Al3  1  0.52813681  0.96074657  0.00000000  1
+  N  N4  1  0.15249353  0.48156959  0.50000000  1
+  N  N5  1  0.99869641  0.12283520  0.00000000  1
+  N  N6  1  0.35106861  0.16924221  0.50000000  1
+  N  N7  1  0.22532794  0.80085872  0.00000000  1
+  N  N8  1  0.59496437  0.88735730  0.50000000  1
+  N  N9  1  0.47714871  0.54154418  0.00000000  1
+  N  N10  1  0.78597714  0.57123131  0.50000000  1
+  N  N11  1  0.70607162  0.26244556  0.00000000  1
+  Si  Si12  1  0.86293869  0.97841726  0.50000000  1
+  Si  Si13  1  0.79085453  0.70282404  0.00000000  1
+  Si  Si14  1  0.41836133  0.60872382  0.50000000  1
+  Si  Si15  1  0.63272544  0.31334801  0.50000000  1

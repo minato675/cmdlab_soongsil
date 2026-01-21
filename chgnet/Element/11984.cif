@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Al11CrN12
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.01291448
+_cell_length_b   5.43388615
+_cell_length_c   9.44969592
+_cell_angle_alpha   89.99865392
+_cell_angle_beta   90.00026072
+_cell_angle_gamma   89.94141283
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Al11CrN12
+_chemical_formula_sum   'Al11 Cr1 N12'
+_cell_volume   257.40586448
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.00634228  0.16731784  0.83525804  1
+  Al  Al1  1  0.50296208  0.83469055  0.16726853  1
+  Al  Al2  1  0.50269804  0.33706783  0.00207177  1
+  Al  Al3  1  0.00212815  0.16708407  0.16626432  1
+  Al  Al4  1  0.00173785  0.66583305  0.33290967  1
+  Al  Al5  1  0.00397182  0.16404783  0.49738011  1
+  Al  Al6  1  0.00574901  0.66937411  0.66751436  1
+  Al  Al7  1  0.00312672  0.66790417  0.00081093  1
+  Al  Al8  1  0.50079741  0.33272799  0.33042269  1
+  Al  Al9  1  0.50056489  0.82947672  0.49817485  1
+  Al  Al10  1  0.50257907  0.83447172  0.83595144  1
+  N  N11  1  0.62097323  0.16701603  0.16611288  1
+  N  N12  1  0.62014179  0.66408754  0.33246736  1
+  N  N13  1  0.62199079  0.15774918  0.49064101  1
+  N  N14  1  0.62348949  0.67920611  0.66872178  1
+  N  N15  1  0.62525899  0.16608026  0.84154126  1
+  N  N16  1  0.62177111  0.66865511  0.00159817  1
+  N  N17  1  0.12079577  0.83390088  0.16723256  1
+  N  N18  1  0.12023227  0.33304965  0.33223127  1
+  N  N19  1  0.12033766  0.83069209  0.49942697  1
+  N  N20  1  0.11159512  0.33148843  0.66542556  1
+  N  N21  1  0.12210477  0.83361594  0.83457561  1
+  N  N22  1  0.12196922  0.33516756  0.00095069  1
+  Cr  Cr23  1  0.51668249  0.32929534  0.66504820  1

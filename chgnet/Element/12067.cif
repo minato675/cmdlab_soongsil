@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_HfTaTiNbVC5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   7.03950000
+_cell_length_b   4.48150000
+_cell_length_c   7.04250000
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   HfTaTiNbVC5
+_chemical_formula_sum   'Hf2 Ta2 Ti2 Nb2 V2 C10'
+_cell_volume   222.17340432
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  C  C0  1  0.70668703  0.00000000  0.90924979  1
+  C  C1  1  0.49576009  0.00000000  0.49673977  1
+  C  C2  1  0.60071462  0.50000000  0.18721925  1
+  C  C3  1  0.89843108  0.00000000  0.28870641  1
+  C  C4  1  0.99709954  0.50000000  0.00040828  1
+  C  C5  1  0.29775790  0.00000000  0.10062284  1
+  C  C6  1  0.40435130  0.50000000  0.81016022  1
+  C  C7  1  0.80467103  0.50000000  0.60550924  1
+  C  C8  1  0.10208852  0.00000000  0.70719417  1
+  C  C9  1  0.19675163  0.50000000  0.39388025  1
+  Hf  Hf10  1  0.49943878  0.50000000  0.49779779  1
+  Hf  Hf11  1  0.80056555  0.00000000  0.60248712  1
+  Nb  Nb12  1  0.40209812  0.00000000  0.81141900  1
+  Nb  Nb13  1  0.09787699  0.50000000  0.71197090  1
+  Ta  Ta14  1  0.19995504  0.00000000  0.39106369  1
+  Ta  Ta15  1  0.90005412  0.50000000  0.28826506  1
+  Ti  Ti16  1  0.30380161  0.50000000  0.09809246  1
+  Ti  Ti17  1  0.60413654  0.00000000  0.19548921  1
+  V  V18  1  0.69652534  0.50000000  0.90586411  1
+  V  V19  1  0.99123518  0.00000000  0.99788041  1

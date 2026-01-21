@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_AlFeCoNiAg
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.67505237
+_cell_length_b   6.00675198
+_cell_length_c   8.09733892
+_cell_angle_alpha   100.01265654
+_cell_angle_beta   106.33463040
+_cell_angle_gamma   87.39232688
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   AlFeCoNiAg
+_chemical_formula_sum   'Al4 Fe4 Co4 Ni4 Ag4'
+_cell_volume   260.84943696
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ag  Ag0  1  0.19865173  0.60053582  0.00149629  1
+  Ag  Ag1  1  0.97780590  0.76141180  0.25744490  1
+  Ag  Ag2  1  0.42079908  0.95926255  0.25430433  1
+  Ag  Ag3  1  0.40624794  0.68892916  0.49959787  1
+  Al  Al4  1  0.17625777  0.34129651  0.22968108  1
+  Al  Al5  1  0.64382149  0.29219149  0.49613047  1
+  Al  Al6  1  0.60434962  0.04015902  0.75662523  1
+  Al  Al7  1  0.39462080  0.45749919  0.75180066  1
+  Co  Co8  1  0.77191925  0.39448140  0.99027913  1
+  Co  Co9  1  0.60539713  0.51718403  0.23990939  1
+  Co  Co10  1  0.82387428  0.90840880  0.52939946  1
+  Co  Co11  1  0.80605809  0.64375011  0.75350414  1
+  Fe  Fe12  1  0.17215187  0.12302746  0.51702443  1
+  Fe  Fe13  1  0.00109570  0.24913230  0.76164827  1
+  Fe  Fe14  1  0.61352356  0.79502841  0.98503352  1
+  Fe  Fe15  1  0.18109045  0.85814183  0.75322926  1
+  Ni  Ni16  1  0.99001172  0.01155229  0.98824873  1
+  Ni  Ni17  1  0.40750863  0.18794174  0.99088945  1
+  Ni  Ni18  1  0.99408484  0.50366037  0.50599482  1
+  Ni  Ni19  1  0.81073019  0.16640572  0.23775856  1

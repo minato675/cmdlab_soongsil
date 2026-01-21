@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_TiAlFeCoNi
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.54462610
+_cell_length_b   5.87437931
+_cell_length_c   7.61230499
+_cell_angle_alpha   90.33122272
+_cell_angle_beta   89.58574855
+_cell_angle_gamma   89.01321121
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   TiAlFeCoNi
+_chemical_formula_sum   'Ti4 Al4 Fe4 Co4 Ni4'
+_cell_volume   247.89461368
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.07921339  0.28154313  0.74425151  1
+  Al  Al1  1  0.20465964  0.58892978  0.00563278  1
+  Al  Al2  1  0.31724887  0.89633657  0.24538690  1
+  Al  Al3  1  0.44149740  0.19190145  0.99673444  1
+  Co  Co4  1  0.28401034  0.89136713  0.76532163  1
+  Co  Co5  1  0.47489234  0.49570294  0.75131462  1
+  Co  Co6  1  0.60894324  0.78994284  0.48164721  1
+  Co  Co7  1  0.90125312  0.70504322  0.25079702  1
+  Ti  Ti8  1  0.96001075  0.01056853  0.01885875  1
+  Ti  Ti9  1  0.21689282  0.61615194  0.50285773  1
+  Ti  Ti10  1  0.42489436  0.17622768  0.50618674  1
+  Ti  Ti11  1  0.85282473  0.70893773  0.74332294  1
+  Fe  Fe12  1  0.70921000  0.10244031  0.26197692  1
+  Fe  Fe13  1  0.80395342  0.40896321  0.48701398  1
+  Fe  Fe14  1  0.60123370  0.79001175  0.99687158  1
+  Fe  Fe15  1  0.80294105  0.42630641  0.00732940  1
+  Ni  Ni16  1  0.99678437  0.00936962  0.48902119  1
+  Ni  Ni17  1  0.11252257  0.30025624  0.24731524  1
+  Ni  Ni18  1  0.69289923  0.11106844  0.74756940  1
+  Ni  Ni19  1  0.51411467  0.49893108  0.25059006  1

@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_FeNi2Rh
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   4.41202416
+_cell_length_b   5.67391731
+_cell_length_c   8.01931902
+_cell_angle_alpha   106.43320012
+_cell_angle_beta   89.78540808
+_cell_angle_gamma   105.17048997
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   FeNi2Rh
+_chemical_formula_sum   'Fe4 Ni8 Rh4'
+_cell_volume   185.30409789
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Rh  Rh0  1  0.49635542  0.48994184  0.49199790  1
+  Rh  Rh1  1  0.24780272  0.74684671  0.75509771  1
+  Rh  Rh2  1  0.62995729  0.87820210  0.36357776  1
+  Rh  Rh3  1  0.81954868  0.94310813  0.69229113  1
+  Fe  Fe4  1  0.19390649  0.05036247  0.30517716  1
+  Fe  Fe5  1  0.06174786  0.69278960  0.42893460  1
+  Fe  Fe6  1  0.42500116  0.80965861  0.06609103  1
+  Fe  Fe7  1  0.88628758  0.63441830  0.12768579  1
+  Ni  Ni8  1  0.99529447  0.99675138  0.00894197  1
+  Ni  Ni9  1  0.37333174  0.12561731  0.62405008  1
+  Ni  Ni10  1  0.12362674  0.37760655  0.88360133  1
+  Ni  Ni11  1  0.56089623  0.19116601  0.94528195  1
+  Ni  Ni12  1  0.30707122  0.43755993  0.18271675  1
+  Ni  Ni13  1  0.75757772  0.25701069  0.24411415  1
+  Ni  Ni14  1  0.93844679  0.31268483  0.55908131  1
+  Ni  Ni15  1  0.68314790  0.55627553  0.82135936  1

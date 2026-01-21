@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_Al3Fe(CN)2
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.88264569
+_cell_length_b   5.86837378
+_cell_length_c   6.47453039
+_cell_angle_alpha   105.13682905
+_cell_angle_beta   104.70579988
+_cell_angle_gamma   55.89887545
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Al3Fe(CN)2
+_chemical_formula_sum   'Al6 Fe2 C4 N4'
+_cell_volume   177.03506021
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.84390700  0.18561665  0.76430018  1
+  Al  Al1  1  0.84707309  0.16504561  0.24899541  1
+  Al  Al2  1  0.32786013  0.68225320  0.49623411  1
+  Al  Al3  1  0.34132617  0.66879604  0.00981913  1
+  Al  Al4  1  0.41853861  0.07911006  0.37010735  1
+  Al  Al5  1  0.43172506  0.06421938  0.88409148  1
+  Fe  Fe6  1  0.91935415  0.59089818  0.62381592  1
+  Fe  Fe7  1  0.92136695  0.58700152  0.12813250  1
+  C  C8  1  0.65114533  0.96262785  0.65086004  1
+  C  C9  1  0.10245449  0.48422566  0.90095471  1
+  C  C10  1  0.73739398  0.40687895  0.52875614  1
+  C  C11  1  0.22425731  0.87756141  0.77885158  1
+  N  N12  1  0.64558630  0.97987252  0.15867257  1
+  N  N13  1  0.13244304  0.47876861  0.39318154  1
+  N  N14  1  0.72877398  0.39616453  0.03866014  1
+  N  N15  1  0.22679440  0.89095981  0.27456719  1

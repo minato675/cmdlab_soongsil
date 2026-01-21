@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Al11ReN12
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.01586358
+_cell_length_b   5.78792524
+_cell_length_c   7.09556951
+_cell_angle_alpha   90.00144582
+_cell_angle_beta   90.06603192
+_cell_angle_gamma   90.00209436
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Al11ReN12
+_chemical_formula_sum   'Al11 Re1 N12'
+_cell_volume   205.99448750
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.50020080  0.24883701  1.00137350  1
+  Al  Al1  1  0.33563764  -0.00004022  0.67391911  1
+  Al  Al2  1  0.16653754  0.75253975  0.33450690  1
+  Al  Al3  1  0.50005196  0.75127120  1.00189363  1
+  Al  Al4  1  0.33607001  0.50040811  0.67051879  1
+  Al  Al5  1  -0.00035046  0.00053827  0.99492083  1
+  Al  Al6  1  0.83294281  0.75133779  0.66545409  1
+  Al  Al7  1  0.99614031  0.50030935  0.99687314  1
+  Al  Al8  1  0.16739768  0.24777195  0.33404083  1
+  Al  Al9  1  0.83348615  0.24863039  0.66508078  1
+  Al  Al10  1  0.66514782  -0.00001761  0.33413750  1
+  Re  Re11  1  0.66697072  0.50001788  0.33372277  1
+  N  N12  1  0.16809981  0.24794353  0.83268549  1
+  N  N13  1  0.49177601  0.23939425  0.50919794  1
+  N  N14  1  0.34164664  0.99964767  0.17014932  1
+  N  N15  1  0.16751733  0.75086414  0.83329393  1
+  N  N16  1  0.49135639  0.76104816  0.50935244  1
+  N  N17  1  0.31361197  0.49934520  0.15925891  1
+  N  N18  1  0.84004005  0.24026775  0.15514567  1
+  N  N19  1  0.66800059  1.00004230  0.83254589  1
+  N  N20  1  0.99039413  1.00015185  0.49617504  1
+  N  N21  1  0.84030872  0.76035480  0.15568917  1
+  N  N22  1  0.66695465  0.50016846  0.83222517  1
+  N  N23  1  0.01985261  0.50015651  0.50757585  1

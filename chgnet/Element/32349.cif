@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_HfMo3C4
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   6.22725439
+_cell_length_b   3.11318401
+_cell_length_c   10.56068693
+_cell_angle_alpha   90.00000002
+_cell_angle_beta   89.99450278
+_cell_angle_gamma   119.99529153
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   HfMo3C4
+_chemical_formula_sum   'Hf2 Mo6 C8'
+_cell_volume   177.31472375
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Mo  Mo0  1  0.16944426  0.66944426  0.37988319  1
+  Mo  Mo1  1  0.32462927  0.32462927  0.60489856  1
+  Mo  Mo2  1  0.16957774  0.66957774  0.11421627  1
+  Mo  Mo3  1  0.67537073  0.67537073  0.39510144  1
+  Mo  Mo4  1  0.83042226  0.33042226  0.88578373  1
+  Mo  Mo5  1  0.83055574  0.33055574  0.62011681  1
+  Hf  Hf6  1  0.33229419  0.33229419  0.87541914  1
+  Hf  Hf7  1  0.66770581  0.66770581  0.12458086  1
+  C  C8  1  0.00000000  0.00000000  0.00000000  1
+  C  C9  1  0.00000000  0.00000000  0.50000000  1
+  C  C10  1  0.15999043  0.65999043  0.73922885  1
+  C  C11  1  0.32262812  0.32262812  0.25403081  1
+  C  C12  1  0.50000000  0.00000000  0.00000000  1
+  C  C13  1  0.50000000  0.00000000  0.50000000  1
+  C  C14  1  0.67737188  0.67737188  0.74596919  1
+  C  C15  1  0.84000957  0.34000957  0.26077115  1

@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_ZrTaTiMoAuC5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   7.10993443
+_cell_length_b   7.31255609
+_cell_length_c   4.49315586
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   87.02541667
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   ZrTaTiMoAuC5
+_chemical_formula_sum   'Zr2 Ta2 Ti2 Mo2 Au2 C10'
+_cell_volume   233.29248531
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  C  C0  1  0.29831085  0.90810026  0.00000000  1
+  C  C1  1  0.50203947  0.49110914  0.00000000  1
+  C  C2  1  0.39364484  0.20399959  0.50000000  1
+  C  C3  1  0.10901072  0.32152306  0.00000000  1
+  C  C4  1  0.01813763  0.02221147  0.50000000  1
+  C  C5  1  0.69683111  0.09253247  0.00000000  1
+  C  C6  1  0.59688484  0.80845580  0.50000000  1
+  C  C7  1  0.19497330  0.60672990  0.50000000  1
+  C  C8  1  0.90695220  0.66187888  0.00000000  1
+  C  C9  1  0.80261120  0.36360037  0.50000000  1
+  Mo  Mo10  1  0.28297791  0.94488890  0.50000000  1
+  Mo  Mo11  1  0.37459244  0.22319416  0.00000000  1
+  Ti  Ti12  1  0.19574407  0.62213331  0.00000000  1
+  Ti  Ti13  1  0.10620702  0.33260325  0.50000000  1
+  Ta  Ta14  1  0.71697283  0.07944499  0.50000000  1
+  Ta  Ta15  1  0.80709078  0.36467124  0.00000000  1
+  Zr  Zr16  1  0.50005686  0.49371127  0.50000000  1
+  Zr  Zr17  1  0.61003770  0.79194483  0.00000000  1
+  Au  Au18  1  0.88914964  0.68308480  0.50000000  1
+  Au  Au19  1  0.99777458  0.98418234  0.00000000  1

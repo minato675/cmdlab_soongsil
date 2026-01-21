@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Hf2Al3V4C3
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   9.05079624
+_cell_length_b   3.04541122
+_cell_length_c   13.71752916
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   120.31275923
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Hf2Al3V4C3
+_chemical_formula_sum   'Hf4 Al6 V8 C6'
+_cell_volume   326.40883133
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.12805968  0.69208952  0.74070486  1
+  Al  Al1  1  0.20527365  0.30791048  0.24070486  1
+  Al  Al2  1  0.46181765  0.69272649  0.74433421  1
+  Al  Al3  1  0.55611284  0.33416924  0.26429552  1
+  Al  Al4  1  0.77722050  0.66583076  0.76429552  1
+  Al  Al5  1  0.87151568  0.30727351  0.24433421  1
+  V  V6  1  0.10784227  0.66176341  0.08109385  1
+  V  V7  1  0.22549106  0.33823659  0.58109385  1
+  V  V8  1  0.55085156  0.32627733  0.58044791  1
+  V  V9  1  0.56091409  0.34137113  0.91947661  1
+  V  V10  1  0.44464966  0.66697449  0.41759680  1
+  V  V11  1  0.78248178  0.67372267  0.08044791  1
+  V  V12  1  0.88868367  0.33302551  0.91759680  1
+  V  V13  1  0.77241925  0.65862887  0.41947661  1
+  Hf  Hf14  1  0.22506182  0.33759273  0.90716920  1
+  Hf  Hf15  1  0.10827151  0.66240727  0.40716920  1
+  Hf  Hf16  1  0.45283624  0.67925437  0.09485750  1
+  Hf  Hf17  1  0.88049709  0.32074563  0.59485750  1
+  C  C18  1  0.99574874  0.99362311  0.00026866  1
+  C  C19  1  0.99763084  0.99644626  0.50179321  1
+  C  C20  1  0.33570249  0.00355374  0.00179321  1
+  C  C21  1  0.33758459  0.00637689  0.50026866  1
+  C  C22  1  0.67572634  0.01358949  0.99796169  1
+  C  C23  1  0.65760700  0.98641051  0.49796169  1

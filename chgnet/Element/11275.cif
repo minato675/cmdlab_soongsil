@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Y3TiN4
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.79521126
+_cell_length_b   6.68118219
+_cell_length_c   8.16799923
+_cell_angle_alpha   90.14340194
+_cell_angle_beta   89.46371344
+_cell_angle_gamma   90.18940811
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Y3TiN4
+_chemical_formula_sum   'Y9 Ti3 N12'
+_cell_volume   316.23908933
+_cell_formula_units_Z   3
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Y  Y0  1  0.50109052  0.24822808  0.00471593  1
+  Y  Y1  1  0.33680097  0.00487421  0.66147843  1
+  Y  Y2  1  0.16286682  0.75456181  0.33418565  1
+  Y  Y3  1  0.50116989  0.75255194  0.00314616  1
+  Y  Y4  1  0.33891511  0.49337676  0.66097475  1
+  Y  Y5  1  0.99906834  0.00082628  0.00165181  1
+  Y  Y6  1  0.83686329  0.75237675  0.66307113  1
+  Y  Y7  1  0.66343913  0.49712806  0.33583494  1
+  Y  Y8  1  0.99876771  0.49798007  0.99913424  1
+  N  N9  1  0.14664291  0.25187356  0.81984989  1
+  N  N10  1  0.52768176  0.23238432  0.49578086  1
+  N  N11  1  0.33256430  0.01481509  0.18482178  1
+  N  N12  1  0.17040578  0.74771666  0.83223787  1
+  N  N13  1  0.51135253  0.76778672  0.48987249  1
+  N  N14  1  0.32040559  0.48799267  0.17556622  1
+  N  N15  1  0.84534519  0.23910345  0.18699178  1
+  N  N16  1  0.67478159  0.00953221  0.82635710  1
+  N  N17  1  0.98326383  0.02525032  0.49151849  1
+  N  N18  1  0.82450763  0.76152260  0.17470289  1
+  N  N19  1  0.67474657  0.48805632  0.82303530  1
+  N  N20  1  0.00098658  0.46811382  0.49844530  1
+  Ti  Ti21  1  0.13701013  0.24505113  0.32926732  1
+  Ti  Ti22  1  0.84422375  0.25004118  0.66029962  1
+  Ti  Ti23  1  0.66709975  0.00885548  0.34705981  1

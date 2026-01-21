@@ -1,0 +1,50 @@
+# generated using pymatgen
+data_Nb2Al3V4C3
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   8.95449712
+_cell_length_b   2.99018037
+_cell_length_c   13.46138638
+_cell_angle_alpha   90.00000002
+_cell_angle_beta   89.99788245
+_cell_angle_gamma   120.05928761
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Nb2Al3V4C3
+_chemical_formula_sum   'Nb4 Al6 V8 C6'
+_cell_volume   311.96023691
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.12047222  0.68070834  0.74798760  1
+  Al  Al1  1  0.21763296  0.32644943  0.25451731  1
+  Al  Al2  1  0.44593803  0.66890706  0.75092056  1
+  Al  Al3  1  0.55294912  0.32942368  0.24213567  1
+  Al  Al4  1  0.77076014  0.65614020  0.74323231  1
+  Al  Al5  1  0.88490853  0.32736279  0.24648922  1
+  Nb  Nb6  1  0.11397084  0.67095627  0.08766690  1
+  Nb  Nb7  1  0.44250892  0.66376340  0.41400827  1
+  Nb  Nb8  1  0.88641687  0.32962530  0.90622711  1
+  Nb  Nb9  1  0.78163479  0.67245218  0.41385135  1
+  V  V10  1  0.22252904  0.33379356  0.58778768  1
+  V  V11  1  0.22755481  0.34133221  0.91415465  1
+  V  V12  1  0.11122011  0.66683017  0.42141422  1
+  V  V13  1  0.44631312  0.66946968  0.08105339  1
+  V  V14  1  0.55334486  0.33001728  0.58767811  1
+  V  V15  1  0.55358412  0.33037617  0.91442145  1
+  V  V16  1  0.77387850  0.66081774  0.08078540  1
+  V  V17  1  0.89234808  0.33852212  0.58819370  1
+  C  C18  1  0.00020770  0.00031155  0.99700136  1
+  C  C19  1  0.00550148  0.00825221  0.50667811  1
+  C  C20  1  0.33896124  0.00844186  0.99660310  1
+  C  C21  1  0.32827885  0.99241829  0.50829740  1
+  C  C22  1  0.66166381  0.99249572  0.99866455  1
+  C  C23  1  0.66742185  0.00113275  0.51023058  1

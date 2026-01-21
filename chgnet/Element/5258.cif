@@ -1,0 +1,36 @@
+# generated using pymatgen
+data_HfTa4N5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   4.39156770
+_cell_length_b   5.47191779
+_cell_length_c   5.47191779
+_cell_angle_alpha   99.26654091
+_cell_angle_beta   113.65836683
+_cell_angle_gamma   66.34163317
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   HfTa4N5
+_chemical_formula_sum   'Hf1 Ta4 N5'
+_cell_volume   110.31801435
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ta  Ta0  1  0.98785813  0.03169817  0.00741445  1
+  Ta  Ta1  1  0.58044369  0.20741445  0.36830183  1
+  Ta  Ta2  1  0.21955631  0.39258555  0.83169817  1
+  Ta  Ta3  1  0.81214187  0.56830183  0.19258555  1
+  Hf  Hf4  1  0.40000000  0.80000000  0.60000000  1
+  N  N5  1  0.90000000  0.80000000  0.60000000  1
+  N  N6  1  0.51404909  0.97264258  0.00074075  1
+  N  N7  1  0.11330833  0.20074075  0.42735742  1
+  N  N8  1  0.68669167  0.39925925  0.77264258  1
+  N  N9  1  0.28595091  0.62735742  0.19925925  1

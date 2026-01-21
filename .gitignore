@@ -1,0 +1,6 @@
+/GATGNN/DATA
+.chgnet/
+.venv/
+venv/
+__pycache__/
+*.pyc

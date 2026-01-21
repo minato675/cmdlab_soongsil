@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_AlNiCN
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   3.19421278
+_cell_length_b   5.14627524
+_cell_length_c   10.57776834
+_cell_angle_alpha   89.26031894
+_cell_angle_beta   90.00000146
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   AlNiCN
+_chemical_formula_sum   'Al4 Ni4 C4 N4'
+_cell_volume   173.86601994
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.49999950  0.97253276  0.08087221  1
+  Al  Al1  1  0.99999950  0.97716785  0.33782147  1
+  Al  Al2  1  0.00000050  0.44606475  0.16246064  1
+  Al  Al3  1  0.00000050  0.55551991  0.66289331  1
+  Ni  Ni4  1  0.49999950  0.05189227  0.59553554  1
+  Ni  Ni5  1  0.99999950  0.01641712  0.81914057  1
+  Ni  Ni6  1  0.50000050  0.48243698  0.42765043  1
+  Ni  Ni7  1  0.50000050  0.49524599  0.90790041  1
+  C  C8  1  0.49999950  0.58630698  0.07646349  1
+  C  C9  1  0.99999950  0.57825139  0.34543036  1
+  C  C10  1  0.50000050  0.12268474  0.42482414  1
+  C  C11  1  0.50000050  0.13631364  0.89992125  1
+  N  N12  1  0.49999950  0.67330012  0.58873121  1
+  N  N13  1  0.99999950  0.64267859  0.84152717  1
+  N  N14  1  0.00000050  0.07897489  0.16533754  1
+  N  N15  1  0.00000050  0.18421204  0.66349024  1

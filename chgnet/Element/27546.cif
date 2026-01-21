@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_Al2V4CO
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.69676401
+_cell_length_b   2.81131844
+_cell_length_c   13.31629579
+_cell_angle_alpha   90.00014201
+_cell_angle_beta   90.00056296
+_cell_angle_gamma   119.64519308
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Al2V4CO
+_chemical_formula_sum   'Al4 V8 C2 O2'
+_cell_volume   185.35059236
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.15613797  0.65461777  0.24999469  1
+  Al  Al1  1  0.33913895  0.34090904  0.75000430  1
+  Al  Al2  1  0.66050165  0.65982620  0.25000736  1
+  Al  Al3  1  0.84348506  0.34616146  0.74998789  1
+  V  V4  1  0.16712404  0.66851610  0.91245530  1
+  V  V5  1  0.32187472  0.32087223  0.40758886  1
+  V  V6  1  0.32187826  0.32087602  0.09241728  1
+  V  V7  1  0.16710858  0.66850028  0.58753551  1
+  V  V8  1  0.67770331  0.67998320  0.90758605  1
+  V  V9  1  0.83243834  0.33233661  0.41246195  1
+  V  V10  1  0.83245583  0.33235646  0.08754494  1
+  V  V11  1  0.67769650  0.67997835  0.59241754  1
+  C  C12  1  0.99981636  0.00046568  -0.00000091  1
+  C  C13  1  0.99974470  0.00039415  0.49999626  1
+  O  O14  1  0.49979377  0.00044924  0.00000251  1
+  O  O15  1  0.49976867  0.00042388  0.50000047  1

@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_ZrTaTiMnWC5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.39532154
+_cell_length_b   5.42567487
+_cell_length_c   8.20710904
+_cell_angle_alpha   109.10983054
+_cell_angle_beta   109.13671306
+_cell_angle_gamma   80.40384864
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   ZrTaTiMnWC5
+_chemical_formula_sum   'Zr2 Ta2 Ti2 Mn2 W2 C10'
+_cell_volume   213.98963391
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  C  C0  1  0.75491846  0.12963568  0.53047141  1
+  C  C1  1  0.24150795  0.86499015  0.44777583  1
+  C  C2  1  0.75703322  0.55804634  0.34504979  1
+  C  C3  1  0.24259992  0.24221407  0.25219620  1
+  C  C4  1  0.74296507  0.94705175  0.15723859  1
+  C  C5  1  0.25701891  0.65892551  0.05769559  1
+  C  C6  1  0.74535289  0.34837514  0.95526064  1
+  C  C7  1  0.25626369  0.03970704  0.85107862  1
+  C  C8  1  0.74897821  0.76357051  0.74855817  1
+  C  C9  1  0.25201413  0.44441133  0.64657605  1
+  Mn  Mn10  1  0.05980213  0.19172783  0.41979759  1
+  Mn  Mn11  1  0.46831201  0.91902170  0.30611773  1
+  Ta  Ta12  1  0.51045871  0.30494603  0.10845401  1
+  Ta  Ta13  1  0.00497873  0.99890936  0.00815812  1
+  Ti  Ti14  1  0.49290244  0.09419342  0.69960847  1
+  Ti  Ti15  1  0.99711795  0.61421842  0.20145740  1
+  W  W16  1  0.97965066  0.80263627  0.58531880  1
+  W  W17  1  0.48919009  0.68590034  0.88583133  1
+  Zr  Zr18  1  0.50152396  0.49733595  0.49402819  1
+  Zr  Zr19  1  0.99741087  0.39418318  0.79932749  1

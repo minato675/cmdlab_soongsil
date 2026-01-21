@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_TaTiNbMoWC5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.40072685
+_cell_length_b   5.40321078
+_cell_length_c   8.25614798
+_cell_angle_alpha   108.90244746
+_cell_angle_beta   109.37513396
+_cell_angle_gamma   80.60187312
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   TaTiNbMoWC5
+_chemical_formula_sum   'Ta2 Ti2 Nb2 Mo2 W2 C10'
+_cell_volume   214.60262016
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  C  C0  1  0.75527860  0.15428992  0.55352397  1
+  C  C1  1  0.25131874  0.84303492  0.44914959  1
+  C  C2  1  0.75009627  0.54713043  0.34839451  1
+  C  C3  1  0.25090205  0.25927432  0.25135957  1
+  C  C4  1  0.74606641  0.95203175  0.14874380  1
+  C  C5  1  0.24187824  0.64820329  0.05261756  1
+  C  C6  1  0.75534953  0.35362060  0.95084644  1
+  C  C7  1  0.25145564  0.05638924  0.85022570  1
+  C  C8  1  0.74230511  0.74501605  0.74768224  1
+  C  C9  1  0.25662706  0.44093103  0.64860523  1
+  Mo  Mo10  1  0.01862064  0.79277253  0.60400610  1
+  Mo  Mo11  1  0.48266557  0.68504693  0.90010946  1
+  Nb  Nb12  1  0.49921413  0.89437795  0.29955008  1
+  Nb  Nb13  1  0.00722458  0.99696351  0.99838093  1
+  Ta  Ta14  1  0.50523401  0.09214292  0.70133200  1
+  Ta  Ta15  1  0.00130006  0.20389165  0.40015271  1
+  Ti  Ti16  1  0.49607169  0.50086094  0.49977933  1
+  Ti  Ti17  1  -0.00005669  0.60164372  0.19961148  1
+  W  W18  1  0.48838008  0.30597066  0.09804509  1
+  W  W19  1  0.00006830  0.42640764  0.79788422  1

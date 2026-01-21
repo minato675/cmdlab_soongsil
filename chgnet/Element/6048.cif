@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_TiOsN2
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   7.11399586
+_cell_length_b   7.68104785
+_cell_length_c   3.11732599
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   109.83606688
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   TiOsN2
+_chemical_formula_sum   'Ti4 Os4 N8'
+_cell_volume   160.23314986
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ti  Ti0  1  0.08785227  0.87698034  0.50000000  1
+  Ti  Ti1  1  0.02065426  0.50740379  0.00000000  1
+  Ti  Ti2  1  0.27103579  0.24862864  0.00000000  1
+  Ti  Ti3  1  0.52114233  0.99956194  0.00000000  1
+  N  N4  1  0.13537237  0.36635319  0.50000000  1
+  N  N5  1  0.99293803  0.01534947  0.00000000  1
+  N  N6  1  0.37179838  0.10028698  0.50000000  1
+  N  N7  1  0.25505423  0.76985111  0.00000000  1
+  N  N8  1  0.64459868  0.85757217  0.50000000  1
+  N  N9  1  0.52300350  0.50846057  0.00000000  1
+  N  N10  1  0.86537843  0.60310006  0.50000000  1
+  N  N11  1  0.76497067  0.26904958  0.00000000  1
+  Os  Os12  1  0.84587439  0.13124731  0.50000000  1
+  Os  Os13  1  0.77666560  0.74572855  0.00000000  1
+  Os  Os14  1  0.33748571  0.63956330  0.50000000  1
+  Os  Os15  1  0.58617538  0.36086300  0.50000000  1

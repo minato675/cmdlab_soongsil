@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_MnNbFeCoNi
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.68755865
+_cell_length_b   5.69369912
+_cell_length_c   7.43409762
+_cell_angle_alpha   89.72926498
+_cell_angle_beta   89.76324162
+_cell_angle_gamma   89.99897840
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   MnNbFeCoNi
+_chemical_formula_sum   'Mn4 Nb4 Fe4 Co4 Ni4'
+_cell_volume   240.73548166
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Nb  Nb0  1  0.07800084  0.28940869  0.73096280  1
+  Nb  Nb1  1  0.19345429  0.63820587  0.99524513  1
+  Nb  Nb2  1  0.30024481  0.89930167  0.28793006  1
+  Nb  Nb3  1  0.42444618  0.17907494  0.00051977  1
+  Co  Co4  1  0.29971751  0.88473635  0.72089340  1
+  Co  Co5  1  0.52378751  0.49877468  0.74570131  1
+  Co  Co6  1  0.60579976  0.78415521  0.50679013  1
+  Co  Co7  1  0.87742900  0.70372419  0.25235339  1
+  Mn  Mn8  1  0.96621437  0.01935046  0.00596863  1
+  Mn  Mn9  1  0.20434641  0.58337239  0.51455487  1
+  Mn  Mn10  1  0.42009361  0.21479686  0.49821463  1
+  Mn  Mn11  1  0.89257868  0.72054046  0.74274939  1
+  Fe  Fe12  1  0.72068293  0.09904904  0.25324631  1
+  Fe  Fe13  1  0.78662329  0.40390356  0.48978635  1
+  Fe  Fe14  1  0.63094432  0.78176425  0.99465150  1
+  Fe  Fe15  1  0.80888259  0.40817417  0.01101200  1
+  Ni  Ni16  1  0.97989983  0.99137640  0.49915857  1
+  Ni  Ni17  1  0.09905257  0.32069115  0.26068042  1
+  Ni  Ni18  1  0.68198423  0.08845153  0.73763809  1
+  Ni  Ni19  1  0.50581727  0.49114815  0.25194324  1

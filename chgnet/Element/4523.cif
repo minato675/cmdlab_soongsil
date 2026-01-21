@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_TiAl3N4
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   6.39566228
+_cell_length_b   6.39566228
+_cell_length_c   5.05678146
+_cell_angle_alpha   90.42370736
+_cell_angle_beta   89.57629270
+_cell_angle_gamma   120.48027501
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   TiAl3N4
+_chemical_formula_sum   'Ti2 Al6 N8'
+_cell_volume   178.25343051
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.16871478  0.33128522  0.49982761  1
+  Al  Al1  1  0.33532687  0.16467313  0.00084262  1
+  Al  Al2  1  0.16456203  0.83543797  0.49774330  1
+  Al  Al3  1  0.66456203  0.33543797  0.49774330  1
+  Al  Al4  1  0.66871478  0.83128522  0.49982761  1
+  Al  Al5  1  0.83532687  0.66467313  0.00084262  1
+  N  N6  1  0.17344021  0.32655979  0.88118224  1
+  N  N7  1  0.33341173  0.16658827  0.37994971  1
+  N  N8  1  0.15909893  0.84090107  0.87431843  1
+  N  N9  1  0.33347951  0.66652049  0.40167196  1
+  N  N10  1  0.65909893  0.34090107  0.87431843  1
+  N  N11  1  0.83347951  0.16652049  0.40167196  1
+  N  N12  1  0.67344021  0.82655979  0.88118224  1
+  N  N13  1  0.83341173  0.66658827  0.37994971  1
+  Ti  Ti14  1  0.33196595  0.66803405  0.99246414  1
+  Ti  Ti15  1  0.83196595  0.16803405  0.99246414  1

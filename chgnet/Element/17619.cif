@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_AlSiCN
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   3.12183050
+_cell_length_b   5.05810114
+_cell_length_c   10.84461665
+_cell_angle_alpha   89.92056931
+_cell_angle_beta   90.00000148
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   AlSiCN
+_chemical_formula_sum   'Al4 Si4 C4 N4'
+_cell_volume   171.24212785
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.49999950  0.00433323  0.08712177  1
+  Al  Al1  1  0.99999950  0.00733808  0.33539104  1
+  Al  Al2  1  0.00000050  0.49802663  0.16541053  1
+  Al  Al3  1  0.00000050  0.49816440  0.66449254  1
+  Si  Si4  1  0.49999950  0.99156190  0.57854750  1
+  Si  Si5  1  0.99999950  0.00124958  0.83255515  1
+  Si  Si6  1  0.50000050  0.49790088  0.41303162  1
+  Si  Si7  1  0.50000050  0.50429810  0.92123280  1
+  C  C8  1  0.49999950  0.61891038  0.07266271  1
+  C  C9  1  0.99999950  0.61560565  0.34449355  1
+  C  C10  1  0.50000050  0.13658652  0.43228774  1
+  C  C11  1  0.50000050  0.13511836  0.89774056  1
+  N  N12  1  0.49999950  0.63569177  0.58812399  1
+  N  N13  1  0.99999950  0.63512046  0.83099047  1
+  N  N14  1  0.00000050  0.11994769  0.16817633  1
+  N  N15  1  0.00000050  0.10014636  0.66774170  1

@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_FeNi14W5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   5.82150772
+_cell_length_b   5.75679415
+_cell_length_c   7.27326237
+_cell_angle_alpha   90.37074010
+_cell_angle_beta   89.80937599
+_cell_angle_gamma   90.80417629
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   FeNi14W5
+_chemical_formula_sum   'Fe1 Ni14 W5'
+_cell_volume   243.72006612
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Fe  Fe0  1  0.09661946  0.29967505  0.23989195  1
+  Ni  Ni1  1  0.29589934  0.89218856  0.74703033  1
+  Ni  Ni2  1  0.39911479  0.19928948  0.49680887  1
+  Ni  Ni3  1  0.20425277  0.60242059  0.00559200  1
+  Ni  Ni4  1  0.31277274  0.89933090  0.25201265  1
+  Ni  Ni5  1  0.40535394  0.20267010  0.00685947  1
+  Ni  Ni6  1  0.49800509  0.49705821  0.24753453  1
+  Ni  Ni7  1  0.60529892  0.79809901  0.49919957  1
+  Ni  Ni8  1  0.69405004  0.09810374  0.24710999  1
+  Ni  Ni9  1  0.79558118  0.40491659  0.49598446  1
+  Ni  Ni10  1  0.89959689  0.70408146  0.75242802  1
+  Ni  Ni11  1  0.59968213  0.80039989  0.00091640  1
+  Ni  Ni12  1  0.79859782  0.40313726  0.00302154  1
+  Ni  Ni13  1  0.89217903  0.68919958  0.25080939  1
+  Ni  Ni14  1  0.50836999  0.50667594  0.75305933  1
+  W  W15  1  0.99743402  0.01895260  0.47704531  1
+  W  W16  1  0.11197416  0.30445579  0.76727768  1
+  W  W17  1  0.00486018  0.98706755  0.01661187  1
+  W  W18  1  0.20578495  0.58706056  0.49012825  1
+  W  W19  1  0.67457259  0.10521712  0.75067840  1

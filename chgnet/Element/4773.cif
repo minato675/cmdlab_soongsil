@@ -1,0 +1,46 @@
+# generated using pymatgen
+data_ScCrFeCoNi
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   6.24151879
+_cell_length_b   5.13556081
+_cell_length_c   8.37193361
+_cell_angle_alpha   97.57204479
+_cell_angle_beta   96.29656092
+_cell_angle_gamma   89.10357798
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   ScCrFeCoNi
+_chemical_formula_sum   'Sc4 Cr4 Fe4 Co4 Ni4'
+_cell_volume   264.40650829
+_cell_formula_units_Z   4
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Sc  Sc0  1  0.82140778  0.43622768  0.17270285  1
+  Sc  Sc1  1  0.49918340  0.93435137  0.04050516  1
+  Sc  Sc2  1  0.84772054  0.40525986  0.54273939  1
+  Sc  Sc3  1  0.74189184  0.17658436  0.81755444  1
+  Co  Co4  1  0.22196773  0.76208076  0.20047245  1
+  Co  Co5  1  0.06405554  0.46121517  0.95732090  1
+  Co  Co6  1  0.85704058  0.89945024  0.55918827  1
+  Co  Co7  1  0.16946129  0.62247703  0.44435461  1
+  Cr  Cr8  1  0.46579488  0.86624694  0.61517372  1
+  Cr  Cr9  1  0.39663151  0.44038574  0.64911368  1
+  Cr  Cr10  1  0.13806525  0.73181393  0.76208154  1
+  Cr  Cr11  1  0.20820902  0.14268251  0.75798031  1
+  Fe  Fe12  1  0.87598549  0.94534293  0.28253644  1
+  Fe  Fe13  1  0.01503349  0.95918324  0.01282871  1
+  Fe  Fe14  1  0.53170207  0.09118774  0.38056918  1
+  Fe  Fe15  1  0.18033191  0.10991345  0.45421856  1
+  Ni  Ni16  1  0.43880849  0.44700240  0.96758769  1
+  Ni  Ni17  1  0.53600829  0.60926547  0.35804957  1
+  Ni  Ni18  1  0.24971073  0.28762030  0.20406881  1
+  Ni  Ni19  1  0.74099017  0.67170890  0.82095372  1

@@ -1,0 +1,36 @@
+# generated using pymatgen
+data_Hf2Ta3C5
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   3.20767733
+_cell_length_b   3.20767734
+_cell_length_c   13.24977934
+_cell_angle_alpha   83.04750036
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   120.00000003
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   Hf2Ta3C5
+_chemical_formula_sum   'Hf2 Ta3 C5'
+_cell_volume   116.90588728
+_cell_formula_units_Z   1
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Ta  Ta0  1  0.99882077  0.99764154  0.00353768  1
+  Ta  Ta1  1  0.60117923  0.20235846  0.19646232  1
+  Ta  Ta2  1  0.80000000  0.60000000  0.60000000  1
+  Hf  Hf3  1  0.20024105  0.40048211  0.39927684  1
+  Hf  Hf4  1  0.39975895  0.79951789  0.80072316  1
+  C  C5  1  0.30000000  0.60000000  0.10000000  1
+  C  C6  1  0.90186974  0.80373947  0.29439079  1
+  C  C7  1  0.49917007  0.99834015  0.50248978  1
+  C  C8  1  0.10082993  0.20165985  0.69751022  1
+  C  C9  1  0.69813026  0.39626053  0.90560921  1

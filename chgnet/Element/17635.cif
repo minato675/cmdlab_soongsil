@@ -1,0 +1,42 @@
+# generated using pymatgen
+data_NbAl3(CN)2
+_symmetry_space_group_name_H-M   'P 1'
+_cell_length_a   6.05386944
+_cell_length_b   6.06099662
+_cell_length_c   6.64051188
+_cell_angle_alpha   105.56354612
+_cell_angle_beta   105.61586620
+_cell_angle_gamma   56.07434850
+_symmetry_Int_Tables_number   1
+_chemical_formula_structural   NbAl3(CN)2
+_chemical_formula_sum   'Nb2 Al6 C4 N4'
+_cell_volume   192.57762336
+_cell_formula_units_Z   2
+loop_
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Al  Al0  1  0.83782132  0.17153424  0.74850760  1
+  Al  Al1  1  0.84065983  0.16506514  0.25239288  1
+  Al  Al2  1  0.35215325  0.68520042  0.50399942  1
+  Al  Al3  1  0.33157463  0.67243824  0.00726057  1
+  Al  Al4  1  0.41529009  0.08371234  0.37120838  1
+  Al  Al5  1  0.40847323  0.06631105  0.87109131  1
+  Nb  Nb6  1  0.93406650  0.60308536  0.63318384  1
+  Nb  Nb7  1  0.90971720  0.59127180  0.13301421  1
+  C  C8  1  0.62600126  0.98474104  0.65099424  1
+  C  C9  1  0.14263495  0.46596350  0.92229319  1
+  C  C10  1  0.74162063  0.39843408  0.52472366  1
+  C  C11  1  0.21642144  0.87129285  0.77580645  1
+  N  N12  1  0.63381033  0.98794905  0.15533225  1
+  N  N13  1  0.16416891  0.46822516  0.39265452  1
+  N  N14  1  0.72415695  0.38873731  0.03438002  1
+  N  N15  1  0.22142946  0.89603842  0.27315745  1
