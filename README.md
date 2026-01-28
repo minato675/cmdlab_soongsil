@@ -15,7 +15,7 @@ In addition, **CHGNet** is used to relax (optimize) candidate CIF structures bef
 
 
 
-<img width="563" height="324" alt="image" src="https://https://github.com/minato675/cmdlab_soongsil/blob/master/front_pic.png" />
+![Graphical Abstract](front_pic.png)
 
 ---
 
