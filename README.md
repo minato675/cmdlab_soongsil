@@ -4,6 +4,7 @@ This repository contains the implementation of the machine learning framework pr
 
 > **DFT-Verified Database and Machine Learning Framework for Designing High Entropy Carbide with Superior Mechanical Strength/Elastic Stiffness**  
 > Authors: Hyokyeong Kim, Jiho Kim, Kwonyeol Lee, Hayoung Son, Jaewon Choi, Inseong Bae, Haeun Lee, Sooah Kyung, and Jiwoong Kim
+> 
 > Journal: Materials Today Communications
 > 
 > **Paper Link**: https://doi.org/10.1016/j.mtcomm.2026.114990
