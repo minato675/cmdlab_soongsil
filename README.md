@@ -3,8 +3,10 @@
 This repository contains the implementation of the machine learning framework proposed in the paper:
 
 > **DFT-Verified Database and Machine Learning Framework for Designing High Entropy Carbide with Superior Mechanical Strength/Elastic Stiffness**  
-> Authors: Hyokyeong Kim, Jiho Kim, Kwonyeol Lee, Hayoung Son, Jaewon Choi, Inseong Bae, Haeun Lee, Sooah Kyung, and Jiwoong Kim  
-> Journal: (TBD)
+> Authors: Hyokyeong Kim, Jiho Kim, Kwonyeol Lee, Hayoung Son, Jaewon Choi, Inseong Bae, Haeun Lee, Sooah Kyung, and Jiwoong Kim
+> Journal: Materials Today Communications
+> 
+> **Paper Link**: https://doi.org/10.1016/j.mtcomm.2026.114990
 
 The framework is designed to predict the mechanical properties (**Bulk modulus** and **Young’s modulus**) of high-entropy carbides (HECs) using crystal graph neural networks (CGCNN/GATGNN).  
 In addition, **CHGNet** is used to relax (optimize) candidate CIF structures before inference.
@@ -258,4 +260,6 @@ Reproduction checklist:
 
 ## 9. Citation
 
-If you use this repository, please cite our paper (to be updated after publication).
+If you use this repository, please cite our paper.
+
+Kim, H. et al. (2026). DFT-Verified Database and Machine Learning Framework for Designing High Entropy Carbide with Superior Mechanical Properties. Materials Today Communications, 114990.
