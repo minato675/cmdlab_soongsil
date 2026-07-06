@@ -1,266 +1,137 @@
-# HEC-ML: Machine Learning Framework for Predicting Mechanical Properties of High-Entropy Carbides
+# 재료 구조 최적화 및 물성 예측 워크스페이스
 
-This repository contains the implementation of the machine learning framework proposed in the paper:
+[한국어](README.md) | [English](README_EN.md)
 
-> **DFT-Verified Database and Machine Learning Framework for Designing High Entropy Carbide with Superior Mechanical Strength/Elastic Stiffness**  
-> Authors: Hyokyeong Kim, Jiho Kim, Kwonyeol Lee, Hayoung Son, Jaewon Choi, Inseong Bae, Haeun Lee, Sooah Kyung, and Jiwoong Kim
-> 
-> Journal: Materials Today Communications
-> 
-> **Paper Link**: https://doi.org/10.1016/j.mtcomm.2026.114990
+이 저장소는 CIF 결정 구조를 CHGNet으로 최적화하고, GATGNN으로 재료 물성을 학습·평가·예측하기 위한 통합 작업 환경이다.
 
-The framework is designed to predict the mechanical properties (**Bulk modulus** and **Young’s modulus**) of high-entropy carbides (HECs) using crystal graph neural networks (CGCNN/GATGNN).  
-In addition, **CHGNet** is used to relax (optimize) candidate CIF structures before inference.
-
----
-
-## Graphical Abstract
-
-
-
-![Graphical Abstract](front_pic.png)
-
----
-
-## 1. Overview
-
-This project implements **CGCNN** and **GATGNN**-based models to learn quantitative relationships between **crystal structures (CIF)** and **elastic properties**.  
-The models are trained on a **DFT-verified, internally consistent dataset** and applied to predict the mechanical properties of unexplored HEC compositions.
-
-**Main features**
-- Crystal structure-based learning (CIF input)
-- Prediction of:
-  - **Bulk modulus (B)**
-  - **Young’s modulus (E)**
-- Extrapolative screening of high-performance HEC candidates
-- Optional **CHGNet-based structure relaxation** before model inference
-
----
-
-## 2. Repository Structure
-
-This repository is mainly composed of:
-- `GATGNN/` : model training, evaluation, and prediction
-- `chgnet/` : structure relaxation with CHGNet (`optimizer.py`)
-- `requirements.txt` : Python dependencies
-
-A simplified tree:
-
-```
-.
-├── GATGNN/
-│   ├── gatgnn/                 # GATGNN core modules
-│   ├── train.py                # Training
-│   ├── evaluate.py             # Evaluation
-│   ├── predict.py              # Prediction (single CIF / directory)
-│   ├── DATA/                   # Dataset & references (see below)
-│   ├── TRAINED/                # Saved model checkpoints (*.pt)
-│   └── RESULTS/                # Evaluation outputs (*.csv)
-├── chgnet/
-│   ├── optimizer.py            # CHGNet structure relaxation script
-│   ├── Element/                # Input CIFs (to relax)
-│   └── opt_cif/                # Output relaxed CIFs
-└── requirements.txt
+```text
+원본 CIF
+  → CHGNet 구조 최적화
+  → 최적화 CIF
+  → GATGNN 물성 예측
+  → 예측 CSV
 ```
 
----
+## 프로젝트 구성
 
-## 3. Requirements 
+| 경로 | 역할 | 상세 문서 |
+| --- | --- | --- |
+| `chgnet/` | CHGNet 기반 CIF 구조 최적화 | [한국어](chgnet/README.md) · [English](chgnet/README_EN.md) |
+| `GATGNN/` | GATGNN 모델 학습, 평가 및 물성 예측 | [한국어](GATGNN/README.md) · [English](GATGNN/README_EN.md) |
+| `requirements.txt` | CHGNet·GATGNN 통합 최소 실행 환경 | — |
 
-- Virtual environment recommended
-- Python >= 3.11
-- Other dependencies: see `requirements.txt`
+## 전체 작업 흐름
 
-Install:
-```bash
-pip install -r requirements.txt
-```
+### 1. CHGNet 구조 최적화
 
----
+최적화할 CIF 파일을 `chgnet/Element/`에 넣고 실행한다.
 
-## 4. Dataset (DFT-Verified In-house Database)
-
-The dataset consists of **5,103 DFT calculation results**, all generated in-house using a **unified computational protocol** (identical exchange–correlation functionals, k-point sampling strategies, energy cutoffs, and convergence criteria).  
-This ensures strong internal consistency and improves ML robustness.
-
-### 4.1 Composition distribution (by dominant anion)
-- **Nitrides:** 2,796
-- **Carbides:** 1,386
-- **Oxides:** 265
-- **Others (non-C/N/O systems):** 656
-
-### 4.2 Crystal system distribution
-- **Hexagonal:** 1,177
-- **Triclinic:** 1,091
-- **Cubic:** 994
-- **Orthorhombic:** 760
-- **Monoclinic:** 627
-- **Tetragonal:** 450
-- **Rhombohedral:** 4
-
----
-
-## 5. GATGNN DATA Directory Layout
-
-After extracting the provided `DATA.zip`, the `GATGNN/DATA/` folder is organized as follows:
-
-```
-GATGNN/DATA/
-├── cgcnn-reference/          # Reference ids/splits for CGCNN setting
-├── CIF-DATA/                 # Default CIF dataset (CGCNN/MEGNET-compatible)
-├── CIF-DATA_NEW/             # Lab-curated dataset (in-house DFT dataset)
-├── megnet-reference/         # Reference files for MEGNET setting
-├── prediction-directory/     # Put CIFs here for batch prediction
-└── properties-reference/     # Property csv files (labels)
-```
-
-**Notes**
-- `CIF-DATA_NEW/` contains the in-house dataset used to train custom models (`--data_src NEW`).
-- `prediction-directory/` is used for inference on arbitrary CIF files.
-- `properties-reference/` stores label tables used to generate `id_prop.csv`.
-
----
-
-## 6. Workflow (CHGNet → GATGNN)
-
-Recommended pipeline:
-1) **(Optional) Relax/optimize** CIF structures using CHGNet  
-2) **Train** a GATGNN model on `CIF-DATA_NEW`  
-3) **Evaluate** the trained model  
-4) **Predict** properties for new CIFs in batch
-
----
-
-## 6.1 Structure Relaxation with CHGNet
-
-Run CHGNet-based structural relaxation (geometry optimization) for candidate CIFs.
-
-### Step 1 — Input CIF location
-Place CIF files to relax in:
-- `chgnet/Element/`
-
-### Step 2 — Run optimizer
-```bash
-cd chgnet
+```powershell
+cd C:\work\chgnet
 python optimizer.py
 ```
 
-### Output
-Relaxed CIFs will be generated in:
+최적화된 CIF는 같은 파일명으로 `chgnet/opt_cif/`에 저장된다.
+
+현재 스크립트는 원본 구조에 10% strain과 `0.005` 원자 위치 perturbation을 적용한 뒤, 사전 학습된 CHGNet 모델과 BFGS 최적화기로 구조를 완화한다.
+
+### 2. GATGNN 예측 입력 준비
+
+최적화된 CIF 중 물성을 예측할 파일을 `GATGNN/DATA/prediction/<data_src>/`에 복사한다.
+
+```powershell
+Copy-Item C:\work\chgnet\opt_cif\*.cif C:\work\GATGNN\DATA\prediction\prediction-directory\
+```
+
+원본 CIF를 그대로 예측하려는 경우에는 원하는 CIF를 해당 폴더에 직접 넣어도 된다.
+
+### 3. GATGNN 물성 예측
+
+학습된 모델을 선택해 예측을 실행한다.
+
+```powershell
+cd C:\work\GATGNN
+python predict.py --property density --data_src prediction-directory
+```
+
+결과는 `GATGNN/PREDICTIONS/`에 CSV로 저장된다.
+
+다른 물성 예시:
+
+```powershell
+python predict.py --property thermal-conductivity --data_src CMD --to_predict DATA\prediction-directory
+python predict.py --property poisson-ratio --data_src CMD --to_predict DATA\prediction-directory
+python predict.py --property new_bulk-modulus --data_src CMD --to_predict DATA\prediction-directory
+python predict.py --property new_Youngs-modulus --data_src CMD --to_predict DATA\prediction-directory
+```
+
+예측에는 `TRAINED/<property>.pt` 모델이 필요하며, 학습 당시의 데이터 소스와 모델 구조 옵션을 동일하게 사용해야 한다.
+
+### 4. 필요 시 CIF 부피 계산
+
+```powershell
+cd C:\work\GATGNN
+python volume_predict.py --to_predict DATA\prediction-directory
+```
+
+결과는 기본적으로 `GATGNN/PREDICTIONS/volume_prediction-directory.csv`에 저장된다.
+
+## GATGNN 모델 학습과 평가
+
+새 모델을 학습하려면 대응하는 CIF와 물성 CSV를 먼저 준비한다.
+
+```powershell
+cd C:\work\GATGNN
+python train.py --property density --data_src CMD
+python evaluate.py --property density --data_src CMD
+```
+
+- 물성 참조값: `GATGNN/DATA/properties-reference/<property>.csv`
+- 학습 CIF: `GATGNN/DATA/train&evaluate/<data_src>/<ID>.cif`
+- 학습 모델: `GATGNN/TRAINED/<property>.pt`
+- 평가 결과: `GATGNN/RESULTS/<property>_results.csv`
+
+데이터 형식과 지원 물성명은 [GATGNN 상세 매뉴얼](GATGNN/README.md)을 참고한다.
+
+## 실행 환경
+
+Python 3.10~3.12 환경에서 루트 `requirements.txt`로 두 프로젝트의 검증된 최소 의존성을 설치한다.
+
+```powershell
+cd C:\work
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+기본 설치는 CPU용 PyTorch를 선택할 수 있다. NVIDIA GPU를 사용하려면 PyTorch 공식 설치 방식으로 CUDA 호환 빌드를 설치한 뒤 나머지 요구사항을 설치한다.
+
+각 스크립트는 상대 경로를 사용한다. 실행 전에 반드시 해당 프로젝트 폴더로 이동한다.
+
+## Git 관리 정책
+
+다음 대용량 입력·출력은 Git에서 제외된다.
+
+- `chgnet/Element/`
 - `chgnet/opt_cif/`
+- `GATGNN/DATA/train&evaluate/`와 `GATGNN/DATA/prediction/`의 실제 데이터
+- `GATGNN/PREDICTIONS/`의 생성 결과
+- `GATGNN/RESULTS/`의 생성 결과
 
----
+학습·평가 및 예측의 각 data source 폴더와 `GATGNN/PREDICTIONS`, `GATGNN/RESULTS`는 `.gitkeep`만 추적하여 빈 폴더 구조를 유지한다.
 
-## 6.2 Training (GATGNN)
+## 빠른 체크리스트
 
-Training uses the lab dataset in:
-- `GATGNN/DATA/CIF-DATA_NEW/`
+- [ ] 사용할 Python 가상환경 활성화
+- [ ] `chgnet/Element/`에 원본 CIF 배치
+- [ ] `C:\work\chgnet`에서 구조 최적화 실행
+- [ ] 최적화 결과를 GATGNN 예측 폴더로 복사
+- [ ] 필요한 `TRAINED/<property>.pt` 모델 확인
+- [ ] `C:\work\GATGNN`에서 물성 예측 실행
+- [ ] `PREDICTIONS/`의 결과 CSV 검토
 
-Example (Bulk modulus):
-```bash
-cd GATGNN
-python train.py --property new_bulk-modulus --data_src NEW --train_size 0.8
-```
+## 상세 문서
 
-Example (Young’s modulus):
-```bash
-cd GATGNN
-python train.py --property new_Youngs-modulus --data_src NEW --train_size 0.8
-```
-
-Saved model checkpoints:
-- `GATGNN/TRAINED/new_bulk-modulus.pt`
-- `GATGNN/TRAINED/new_Youngs-modulus.pt`
-
----
-
-## 6.3 Evaluation (GATGNN)
-
-Evaluate the trained model:
-
-```bash
-cd GATGNN
-python evaluate.py --property new_bulk-modulus --data_src NEW --train_size 0.8
-```
-
-or:
-```bash
-python evaluate.py --property new_Youngs-modulus --data_src NEW --train_size 0.8
-```
-
-Evaluation results (CSV) are saved to:
-- `GATGNN/RESULTS/new_bulk-modulus_results.csv`
-- `GATGNN/RESULTS/new_Youngs-modulus_results.csv`
-
----
-
-## 6.4 Prediction (GATGNN)
-
-### Batch prediction for all CIFs in a directory
-Put target CIF files into:
-- `GATGNN/DATA/prediction-directory/`
-
-Then run:
-```bash
-cd GATGNN
-python predict.py --property new_bulk-modulus --data_src NEW --to_predict DATA/prediction-directory
-```
-
-For Young’s modulus:
-```bash
-python predict.py --property new_Youngs-modulus --data_src NEW --to_predict DATA/prediction-directory
-```
-
-### Predict a single CIF
-You can also pass:
-- a single CIF file path, or
-- a single CIF id (without extension)
-
-Examples:
-```bash
-python predict.py --property new_bulk-modulus --data_src NEW --to_predict DATA/prediction-directory/1328.cif
-python predict.py --property new_bulk-modulus --data_src NEW --to_predict 1328
-```
-
----
-
-## 7. Custom Properties (Lab-defined)
-
-This repository supports two custom properties for the lab dataset:
-
-- `new_bulk-modulus`
-- `new_Youngs-modulus`
-
-These read labels from:
-- `GATGNN/DATA/properties-reference/newbulkmodulus.csv`
-- `GATGNN/DATA/properties-reference/newyoungsmodulus.csv`
-
-**Important**
-- The first column (material id) must match the CIF filename stem in `CIF-DATA_NEW/` (e.g., `1328` ↔ `1328.cif`).
-- If your CIF filenames include prefixes (e.g., `mp-1328.cif`), the ids in the CSV must match exactly (`mp-1328`).
-
----
-
-## 8. Reproducibility
-
-All experiments reported in the paper can be reproduced using the scripts in this repository.  
-Random seeds, data splits, and hyperparameters are defined in the training/evaluation scripts.
-
-Reproduction checklist:
-1) Extract `DATA.zip` into `GATGNN/DATA/`
-2) Train:
-   - `python train.py --property new_bulk-modulus --data_src NEW`
-   - `python train.py --property new_Youngs-modulus --data_src NEW`
-3) Evaluate:
-   - `python evaluate.py --property new_bulk-modulus --data_src NEW`
-   - `python evaluate.py --property new_Youngs-modulus --data_src NEW`
-4) Predict for new CIFs:
-   - `python predict.py --property new_bulk-modulus --data_src NEW --to_predict DATA/prediction-directory`
-
----
-
-## 9. Citation
-
-If you use this repository, please cite our paper.
-
-Kim, H. et al. (2026). DFT-Verified Database and Machine Learning Framework for Designing High Entropy Carbide with Superior Mechanical Properties. Materials Today Communications, 114990.
+- [CHGNet 구조 최적화 매뉴얼](chgnet/README.md)
+- [GATGNN 학습·평가·예측 매뉴얼](GATGNN/README.md)

@@ -34,8 +34,13 @@ def set_model_properties(crystal_property):
         classification = 1
 
     # ✅ 그 외 회귀 기본값(기존 bulk/shear 등)
-    else:
+    elif crystal_property in ['bulk-modulus', 'shear-modulus']:
         norm_action = 'log'
+        classification = None
+
+    # Newly discovered CSV properties use standard regression by default.
+    else:
+        norm_action = None
         classification = None
 
     return norm_action, classification

@@ -1,257 +1,146 @@
-<h1 align="center">CHGNet</h1>
+# CHGNet 구조 최적화 작업 매뉴얼
 
-<h4 align="center">
+[한국어](README.md) | [English](README_EN.md)
 
-[![Tests](https://github.com/CederGroupHub/chgnet/actions/workflows/test.yml/badge.svg)](https://github.com/CederGroupHub/chgnet/actions/workflows/test.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/e3bdcea0382a495d96408e4f84408e85)](https://app.codacy.com/gh/CederGroupHub/chgnet/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-[![arXiv](https://img.shields.io/badge/arXiv-2302.14231-blue?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2302.14231)
-![GitHub repo size](https://img.shields.io/github/repo-size/CederGroupHub/chgnet?logo=github&logoColor=white&label=Repo%20Size)
-[![PyPI](https://img.shields.io/pypi/v/chgnet?logo=pypi&logoColor=white)](https://pypi.org/project/chgnet?logo=pypi&logoColor=white)
-[![Docs](https://img.shields.io/badge/API-Docs-blue?logo=readthedocs&logoColor=white)](https://chgnet.lbl.gov)
-[![Requires Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg?logo=python&logoColor=white)](https://python.org/downloads)
+이 폴더에서는 사전 학습된 CHGNet 모델로 여러 CIF 구조를 일괄 완화(relaxation)한다.
 
-</h4>
+현재 작업 흐름은 다음과 같다.
 
-A pretrained universal neural network potential for
-**charge**-informed atomistic modeling ([see publication](https://nature.com/articles/s42256-023-00716-3))
-![Logo](https://raw.github.com/CederGroupHub/chgnet/main/site/static/chgnet-logo.png)
-**C**rystal **H**amiltonian **G**raph neural **Net**work is pretrained on the GGA/GGA+U static and relaxation trajectories from Materials Project,
-a comprehensive dataset consisting of more than 1.5 Million structures from 146k compounds spanning the whole periodic table.
-
-CHGNet highlights its ability to study electron interactions and charge distribution
-in atomistic modeling with near DFT accuracy. The charge inference is realized by regularizing the atom features with
-DFT magnetic moments, which carry rich information about both local ionic environments and charge distribution.
-
-Pretrained CHGNet achieves excellent performance on materials stability prediction from unrelaxed structures according to [Matbench Discovery](https://matbench-discovery.materialsproject.org) [[repo](https://github.com/janosh/matbench-discovery)].
-
-<slot name="metrics-table" />
-
-## Example notebooks
-
-| Notebooks                                                                                                                                      | Google&nbsp;Colab                                                                                                                                        | Descriptions                                                                                                                                                                                                                                                                                                                                                                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [CHGNet Basics](https://github.com/CederGroupHub/chgnet/blob/main/examples/basics.ipynb)                                                       | [![Open in Google Colab]](https://colab.research.google.com/github/CederGroupHub/chgnet/blob/main/examples/basics.ipynb)                                 | Examples for loading pre-trained CHGNet, predicting energy, force, stress, magmom as well as running structure optimization and MD.                                                                                                                                                                                                                                                                       |
-| [Tuning CHGNet](https://github.com/CederGroupHub/chgnet/blob/main/examples/fine_tuning.ipynb)                                                  | [![Open in Google Colab]](https://colab.research.google.com/github/CederGroupHub/chgnet/blob/main/examples/fine_tuning.ipynb)                            | Examples of fine tuning the pretrained CHGNet to your system of interest.                                                                                                                                                                                                                                                                                                                                 |
-| [Visualize Relaxation](https://github.com/CederGroupHub/chgnet/blob/main/examples/crystaltoolkit_relax_viewer.ipynb)                           | [![Open in Google Colab]](https://colab.research.google.com/github/CederGroupHub/chgnet/blob/main/examples/crystaltoolkit_relax_viewer.ipynb)            | Crystal Toolkit app that visualizes convergence of atom positions, energies and forces of a structure during CHGNet relaxation.                                                                                                                                                                                                                                                                           |
-| [Phonon DOS + Bands](https://github.com/JaGeo/TutorialAtomate2Forcefields/blob/main/atomate2_workflow_tutorial/phonon.ipynb)                   | [![Open in Google Colab]](https://colab.research.google.com/github/JaGeo/TutorialAtomate2Forcefields/blob/main/atomate2_workflow_tutorial/phonon.ipynb)  | Use CHGNet with the [`atomate2` phonon workflow](https://github.com/materialsproject/atomate2/blob/3764841109840ccc4d1fec6a84af43f244641021/src/atomate2/forcefields/flows/phonons.py#L33) based on finite displacements as implemented in Phonopy to calculate phonon density of states and band structure for `Si` ([mp-149](https://legacy.materialsproject.org/materials/mp-149/#phonon-dispersion)). |
-| [Elastic tensor + bulk/shear modulus](https://github.com/JaGeo/TutorialAtomate2Forcefields/blob/main/atomate2_workflow_tutorial/elastic.ipynb) | [![Open in Google Colab]](https://colab.research.google.com/github/JaGeo/TutorialAtomate2Forcefields/blob/main/atomate2_workflow_tutorial/elastic.ipynb) | Use CHGNet with the [`atomate2` elastic workflow](https://github.com/materialsproject/atomate2/blob/3764841109840ccc4d1fec6a84af43f244641021/src/atomate2/forcefields/flows/elastic.py#L17) based on a stress-strain approach to calculate elastic tensor and derived bulk and shear modulus for `Si` ([mp-149](https://legacy.materialsproject.org/materials/mp-149/#elastic-tensor)).                   |
-
-[Open in Google Colab]: https://colab.research.google.com/assets/colab-badge.svg
-
-## Installation
-
-```sh
-pip install chgnet
+```text
+Element/*.cif
+  → 초기 구조에 10% strain 적용
+  → 원자 위치 0.005 만큼 perturb
+  → CHGNet + BFGS 구조 최적화
+  → opt_cif/*.cif
 ```
 
-if PyPI installation fails or you need the latest `main` branch commits, you can install from source:
+## 1. 폴더 구성
 
-```sh
-pip install git+https://github.com/CederGroupHub/chgnet
+| 경로 | 용도 | Git 추적 |
+| --- | --- | --- |
+| `Element/` | 최적화할 원본 CIF 입력 | 제외 |
+| `opt_cif/` | 최적화된 CIF 출력 | 제외 |
+| `optimizer.py` | 일괄 구조 최적화 스크립트 | 포함 |
+
+입력 파일과 계산 결과는 용량이 커질 수 있어 Git에 올리지 않는다.
+
+## 2. 실행 환경 준비
+
+Python 3.10 이상이 필요하다. 저장소 루트에서 가상환경을 만들고 CHGNet을 editable 모드로 설치하는 예시는 다음과 같다.
+
+```powershell
+cd C:\work
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-## Tutorials and Docs
+설치 확인:
 
-[![2023-11-02-sciML-webinar](https://github.com/CederGroupHub/chgnet/assets/30958850/49fe7d89-bf47-4ea0-aca6-f9014d2f41b8)](https://youtu.be/Lm148F_1Dn4)
+```powershell
+python -c "from chgnet.model import CHGNet; CHGNet.load(); print('CHGNet ready')"
+```
 
-See the [sciML webinar tutorial](https://youtu.be/Lm148F_1Dn4) on 2023-11-02 and [API docs](https://cedergrouphub.github.io/chgnet/api).
+CUDA를 사용하는 경우에는 설치된 PyTorch가 현재 CUDA 환경을 지원하는지 별도로 확인한다. CUDA를 사용할 수 없으면 PyTorch가 CPU로 실행하며 계산 시간이 길어질 수 있다.
 
-## Usage
+## 3. 입력 CIF 준비
 
-### Available Pretrained Models
+최적화할 `.cif` 파일을 `C:\work\chgnet\Element`에 넣는다.
 
-CHGNet provides several pretrained models for different use cases:
+```text
+chgnet/
+├─ Element/
+│  ├─ sample_01.cif
+│  └─ sample_02.cif
+├─ opt_cif/
+└─ optimizer.py
+```
+
+스크립트는 `Element` 바로 아래에 있는 확장자 `.cif` 파일만 처리한다. 하위 폴더는 탐색하지 않는다.
+
+## 4. 구조 최적화 실행
+
+상대 경로를 사용하므로 반드시 `chgnet` 폴더에서 실행한다.
+
+```powershell
+cd C:\work\chgnet
+python optimizer.py
+```
+
+`opt_cif` 폴더가 없으면 자동으로 생성된다. 각 입력 파일과 같은 이름의 최적화 결과가 저장된다.
+
+```text
+Element/sample_01.cif → opt_cif/sample_01.cif
+```
+
+같은 이름의 출력 파일이 이미 있으면 덮어쓸 수 있으므로 필요한 결과는 실행 전에 별도로 백업한다.
+
+## 5. 현재 최적화 조건
+
+`optimizer.py`에는 다음 조건이 고정되어 있다.
+
+- 모델: `CHGNet.load()`로 불러오는 기본 사전 학습 모델
+- 최적화기: `BFGS`
+- 셀 변형: 각 축에 `0.1` strain 적용
+- 원자 위치 교란: `0.005`
+- 입력 폴더: `Element/`
+- 출력 폴더: `opt_cif/`
+
+즉, 입력 구조를 그대로 완화하는 것이 아니라 먼저 의도적인 변형과 원자 위치 교란을 적용한 뒤 최적화한다. 원본 상태에서 바로 완화하려면 아래 두 줄을 제거하거나 주석 처리해야 한다.
 
 ```python
-from chgnet.model.model import CHGNet
-
-# Load the latest CHGNet model (default: 0.3.0)
-chgnet = CHGNet.load()
-# Load specific CHGNet versions
-chgnet = CHGNet.load(model_name='r2scan')
+unrelaxed_structure.apply_strain([0.1, 0.1, 0.1])
+unrelaxed_structure.perturb(0.005)
 ```
 
-**Model Details:**
-
-- `'0.3.0'` (default): MPtrj-pretrained CHGNet
-- `'0.2.0'` : Deprecated MPtrj version for backward compatibility with NMI paper
-- `'r2scan'` : R2SCAN level model transfer learned from MP-R2SCAN dataset
-
-Besides these checkpoints, we also have new CHGNet implementation and checkpoints based on the [MatPES](https://matpes.ai/) dataset available in the [MatGL](https://github.com/materialsvirtuallab/matgl) repo. The MatPES trained model are expected to be significantly better than MPtrj trained models in non-ground-state calculations like Molecular Dynamics.
-
-### Direct Inference (Static Calculation)
-
-Pretrained `CHGNet` can predict the energy (eV/atom), force (eV/A), stress (GPa) and
-magmom ($\mu_B$) of a given structure.
+최적화 알고리즘을 바꾸려면 다음 값을 변경한다.
 
 ```python
-from chgnet.model.model import CHGNet
-from pymatgen.core import Structure
-
-chgnet = CHGNet.load()
-structure = Structure.from_file('examples/mp-18767-LiMnO2.cif')
-prediction = chgnet.predict_structure(structure)
-
-for key, unit in [
-    ("energy", "eV/atom"),
-    ("forces", "eV/A"),
-    ("stress", "GPa"),
-    ("magmom", "mu_B"),
-]:
-    print(f"CHGNet-predicted {key} ({unit}):\n{prediction[key[0]]}\n")
+relaxer = StructOptimizer(optimizer_class="BFGS")
 ```
 
-### Molecular Dynamics
+사용 가능한 예에는 `FIRE`, `BFGS`, `LBFGS`, `LBFGSLineSearch`, `MDMin`, `SciPyFminCG`, `SciPyFminBFGS`, `BFGSLineSearch`가 있다.
 
-Charge-informed molecular dynamics can be simulated with pretrained `CHGNet` through `ASE` python interface (see below),
-or through [LAMMPS](https://github.com/advancesoftcorp/lammps/tree/based-on-lammps_2Aug2023/src/ML-CHGNET).
+## 6. 결과 확인
 
-```python
-from chgnet.model.model import CHGNet
-from chgnet.model.dynamics import MolecularDynamics
-from pymatgen.core import Structure
-import warnings
-warnings.filterwarnings("ignore", module="pymatgen")
-warnings.filterwarnings("ignore", module="ase")
+실행 후 다음을 확인한다.
 
-structure = Structure.from_file("examples/mp-18767-LiMnO2.cif")
-chgnet = CHGNet.load()
+1. 입력 CIF 수와 출력 CIF 수가 같은지 확인한다.
+2. 출력 CIF를 pymatgen, VESTA 등의 도구로 열어 구조가 정상인지 확인한다.
+3. 터미널에 오류가 발생한 파일이 없는지 확인한다.
+4. 중요한 계산에는 에너지, 힘, 응력 및 수렴 조건을 별도로 검증한다.
 
-md = MolecularDynamics(
-    atoms=structure,
-    model=chgnet,
-    ensemble="nvt",
-    temperature=1000,  # in K
-    timestep=2,  # in femto-seconds
-    trajectory="md_out.traj",
-    logfile="md_out.log",
-    loginterval=100,
-)
-md.run(50)  # run a 0.1 ps MD simulation
+간단한 파일 수 확인:
+
+```powershell
+(Get-ChildItem .\Element -Filter *.cif).Count
+(Get-ChildItem .\opt_cif -Filter *.cif).Count
 ```
 
-The MD defaults to CUDA if available, to manually set device to cpu or mps:
-`MolecularDynamics(use_device='cpu')`.
+## 7. 자주 발생하는 문제
 
-MD outputs are saved to the ASE trajectory file, to visualize the MD trajectory
-and magnetic moments after the MD run:
+### `FileNotFoundError: Element`
 
-```python
-from ase.io.trajectory import Trajectory
-from pymatgen.io.ase import AseAtomsAdaptor
-from chgnet.utils import solve_charge_by_mag
+`C:\work\chgnet`이 아닌 다른 위치에서 실행했을 가능성이 크다. `cd C:\work\chgnet` 후 다시 실행한다.
 
-traj = Trajectory("md_out.traj")
-mag = traj[-1].get_magnetic_moments()
+### 패키지 import 오류
 
-# get the non-charge-decorated structure
-structure = AseAtomsAdaptor.get_structure(traj[-1])
-print(structure)
+가상환경이 활성화되었는지 확인하고 `python -m pip install -r requirements.txt`를 저장소 루트에서 다시 실행한다.
 
-# get the charge-decorated structure
-struct_with_chg = solve_charge_by_mag(structure)
-print(struct_with_chg)
-```
+### 일부 CIF만 실패
 
-To manipulate the MD trajectory, convert to other data formats, calculate mean square displacement, etc,
-please refer to [ASE trajectory documentation](https://wiki.fysik.dtu.dk/ase/ase/io/trajectory.html).
+CIF 문법, 원소 기호, 점유율 또는 비정상적인 격자 정보를 확인한다. 현재 스크립트는 한 파일에서 예외가 발생하면 전체 실행이 중단될 수 있으므로 실패 파일을 분리한 뒤 다시 실행한다.
 
-### Structure Optimization
+### GPU 메모리 부족
 
-`CHGNet` can perform fast structure optimization and provide site-wise magnetic moments. This makes it ideal for pre-relaxation and
-`MAGMOM` initialization in spin-polarized DFT.
+현재 스크립트는 파일을 한 개씩 처리한다. 그래도 메모리가 부족하면 다른 GPU 작업을 종료하거나 CPU 환경에서 실행한다.
 
-```python
-from chgnet.model import StructOptimizer
+## 8. 작업 체크리스트
 
-relaxer = StructOptimizer()
-result = relaxer.relax(structure)
-print("CHGNet relaxed structure", result["final_structure"])
-print("relaxed total energy in eV:", result['trajectory'].energies[-1])
-```
-
-### Available Weights
-
-CHGNet 0.3.0 is released with new pretrained weights! (release date: 10/22/23)
-
-`CHGNet.load()` now loads `0.3.0` by default,
-previous `0.2.0` version can be loaded with `CHGNet.load('0.2.0')`
-
-- [CHGNet_0.3.0](https://github.com/CederGroupHub/chgnet/blob/main/chgnet/pretrained/0.3.0/README.md)
-- [CHGNet_0.2.0](https://github.com/CederGroupHub/chgnet/blob/main/chgnet/pretrained/0.2.0/README.md)
-
-### Model Training / Fine-tune
-
-Fine-tuning will help achieve better accuracy if a high-precision study is desired. To train/tune a `CHGNet`, you need to define your data in a
-pytorch `Dataset` object. The example datasets are provided in `data/dataset.py`
-
-```python
-from chgnet.data.dataset import StructureData, get_train_val_test_loader
-from chgnet.trainer import Trainer
-
-dataset = StructureData(
-    structures=list_of_structures,
-    energies=list_of_energies,
-    forces=list_of_forces,
-    stresses=list_of_stresses,
-    magmoms=list_of_magmoms,
-)
-train_loader, val_loader, test_loader = get_train_val_test_loader(
-    dataset, batch_size=32, train_ratio=0.9, val_ratio=0.05
-)
-trainer = Trainer(
-    model=chgnet,
-    targets="efsm",
-    optimizer="Adam",
-    criterion="MSE",
-    learning_rate=1e-2,
-    epochs=50,
-    use_device="cuda",
-)
-
-trainer.train(train_loader, val_loader, test_loader)
-```
-
-#### Notes for Training
-
-Check [fine-tuning example notebook](https://github.com/CederGroupHub/chgnet/blob/main/examples/fine_tuning.ipynb)
-
-1. The target quantity used for training should be energy/atom (not total energy) if you're fine-tuning the pretrained `CHGNet`.
-2. The pretrained dataset of `CHGNet` comes from GGA+U DFT with [`MaterialsProject2020Compatibility`](https://github.com/materialsproject/pymatgen/blob/v2023.2.28/pymatgen/entries/compatibility.py#L826-L1102) corrections applied.
-   The parameter for VASP is described in [`MPRelaxSet`](https://github.com/materialsproject/pymatgen/blob/v2023.2.28/pymatgen/io/vasp/sets.py#L862-L879).
-   If you're fine-tuning with [`MPRelaxSet`](https://github.com/materialsproject/pymatgen/blob/v2023.2.28/pymatgen/io/vasp/sets.py#L862-L879), it is recommended to apply the [`MP2020`](https://github.com/materialsproject/pymatgen/blob/v2023.2.28/pymatgen/entries/compatibility.py#L826-L1102)
-   compatibility to your energy labels so that they're consistent with the pretrained dataset.
-3. If you're fine-tuning to functionals other than GGA, we recommend you refit the [`AtomRef`](https://github.com/CederGroupHub/chgnet/blob/main/chgnet/model/composition_model.py).
-4. `CHGNet` stress is in units of GPa, and the unit conversion has already been included in
-   [`dataset.py`](https://github.com/CederGroupHub/chgnet/blob/main/chgnet/data/dataset.py). So `VASP` stress can be directly fed to `StructureData`
-5. To save time from graph conversion step for each training, we recommend you use [`GraphData`](https://github.com/CederGroupHub/chgnet/blob/main/chgnet/data/dataset.py) defined in
-   [`dataset.py`](https://github.com/CederGroupHub/chgnet/blob/main/chgnet/data/dataset.py), which reads graphs directly from saved directory. To create saved graphs,
-   see [`examples/make_graphs.py`](https://github.com/CederGroupHub/chgnet/blob/main/examples/make_graphs.py).
-
-## MPtrj Dataset
-
-The Materials Project trajectory (MPtrj) dataset used to pretrain CHGNet is available at
-[figshare](https://figshare.com/articles/dataset/Materials_Project_Trjectory_MPtrj_Dataset/23713842).
-
-The MPtrj dataset consists of all the GGA/GGA+U DFT calculations from the September 2022 [Materials Project](https://next-gen.materialsproject.org/).
-By using the MPtrj dataset, users agree to abide the [Materials Project terms of use](https://next-gen.materialsproject.org/about/terms).
-
-## Reference
-
-If you use CHGNet or MPtrj dataset, please cite [this paper](https://nature.com/articles/s42256-023-00716-3):
-
-```bib
-@article{deng_2023_chgnet,
-    title={CHGNet as a pretrained universal neural network potential for charge-informed atomistic modelling},
-    DOI={10.1038/s42256-023-00716-3},
-    journal={Nature Machine Intelligence},
-    author={Deng, Bowen and Zhong, Peichen and Jun, KyuJung and Riebesell, Janosh and Han, Kevin and Bartel, Christopher J. and Ceder, Gerbrand},
-    year={2023},
-    pages={1–11}
-}
-```
-
-## Development & Bugs
-
-The current `CHGNet` implementation has been migrated to [MatGL](https://github.com/materialsvirtuallab/matgl) repo, which includes more accurate checkpoints. Unless critical bugs, feature developments will be limited under this legacy implementation. If you encounter critical bugs,
-please open an [issue](https://github.com/CederGroupHub/chgnet/issues). We appreciate your contributions!
+- [ ] 가상환경 활성화
+- [ ] `Element/`에 입력 CIF 배치
+- [ ] 기존 `opt_cif/` 결과 백업 여부 확인
+- [ ] `C:\work\chgnet`에서 `python optimizer.py` 실행
+- [ ] 입력/출력 파일 수 비교
+- [ ] 최적화 구조 및 계산 로그 검토

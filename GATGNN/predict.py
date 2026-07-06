@@ -13,6 +13,7 @@ from gatgnn.model                  import *
 from gatgnn.pytorch_early_stopping import *
 from gatgnn.file_setter            import use_property
 from gatgnn.utils                  import *
+from gatgnn.interactive_config     import parse_args_interactively, resolve_data_source
 
 
 def _stem_cif_name(p: Path) -> str:
@@ -47,7 +48,7 @@ def resolve_targets(to_predict: str):
         return ids, str(p.parent)
 
     # fallback: treat as cif id name, look in default prediction-directory
-    return [to_predict], "DATA/prediction-directory"
+    return [to_predict], "DATA/prediction/prediction-directory"
 
 
 # MOST CRUCIAL DATA PARAMETERS
@@ -75,14 +76,14 @@ parser.add_argument(
 parser.add_argument(
     '--data_src',
     default='CGCNN',
-    choices=['CGCNN', 'MEGNET', 'NEW', 'CMD'],
+    choices=None,
     help='selection of the materials dataset to use (default: CGCNN)'
 )
 
 # ✅ to_predict: id OR path-to-cif OR path-to-directory
 parser.add_argument(
     '--to_predict',
-    default='DATA/prediction-directory',
+    default='DATA/prediction/prediction-directory',
     help="cif id (without extension) OR a .cif/.cif.gz file path OR a directory path (predict all CIFs in it)"
 )
 
@@ -104,7 +105,9 @@ parser.add_argument('--concat_comp', default=False, type=bool,
 parser.add_argument('--train_size', default=0.8, type=float,
                     help='ratio size of the training-set (default:0.8)')
 
-args = parser.parse_args(sys.argv[1:])
+# Property CSV files and DATA folders are discovered dynamically.
+next(action for action in parser._actions if action.dest == 'property').choices = None
+args = parse_args_interactively(parser, sys.argv[1:], workflow='predict')
 
 # -----------------------------
 # Property handling
@@ -121,10 +124,10 @@ model_property = MODEL_PROPERTY_ALIASES.get(prop_arg, prop_arg)
 data_src = args.data_src
 
 # ✅ 그래프/엣지 포맷은 기존 분기(NEW)로 태우고, 데이터셋 준비는 CMD로 처리
-edge_src = 'NEW' if data_src == 'CMD' else data_src
+src_CIF, edge_src = resolve_data_source(data_src, workflow='predict')
 
 # ✅ file_setter에서 CMD / density / thermalconductivity까지 id_prop.csv 세팅되도록
-_, _, RSM = use_property(prop_arg, data_src, True)
+RSM = {'radius': 8, 'step': 0.2, 'max_num_nbr': 12}
 norm_action, classification = set_model_properties(model_property)
 
 # targets
@@ -156,13 +159,6 @@ dataset['label']        = [0.00001] * len(dataset)  # dummy label
 NORMALIZER              = DATA_normalizer(dataset.label.values)
 
 # ✅ data_src별 CIF 폴더 선택 (학습 때와 동일 규칙)
-if data_src == 'CMD':
-    src_CIF = 'CIF-DATA_CMD'
-elif data_src == 'NEW':
-    src_CIF = 'CIF-DATA_NEW'
-else:
-    src_CIF = 'CIF-DATA'
-
 CRYSTAL_DATA = CIF_Dataset(dataset, root_dir=f'DATA/{src_CIF}/', **RSM)
 
 # ✅ prediction directory override (file/dir/id)

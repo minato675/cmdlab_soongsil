@@ -253,6 +253,9 @@ class CIF_Dataset(Dataset):
     @functools.lru_cache(maxsize=None)  # Cache loaded structures
     def __getitem__(self, idx):
         cif_id, target = self.full_data.iloc[idx]
+        cif_id = str(cif_id).strip()
+        if cif_id.endswith('.0'):
+            cif_id = cif_id[:-2]
         crystal = Structure.from_file(os.path.join(self.root_dir, cif_id+'.cif'))
         atom_fea = np.vstack([self.ari.get_atom_fea(crystal[i].specie.number) for i in range(len(crystal))])
         atom_fea = torch.Tensor(atom_fea)

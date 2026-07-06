@@ -2,13 +2,26 @@
 /chgnet/Element/
 /chgnet/opt_cif/
 
-# GATGNN datasets: keep only the reference properties in Git
+# GATGNN datasets: keep the directory shells and reference properties
 /GATGNN/DATA/*
 
-# Keep prediction/output directory shells, but ignore generated contents
-!/GATGNN/DATA/prediction-directory/
-/GATGNN/DATA/prediction-directory/*
-!/GATGNN/DATA/prediction-directory/.gitkeep
+# Training/evaluation data-source shells
+!/GATGNN/DATA/train&evaluate/
+/GATGNN/DATA/train&evaluate/*
+!/GATGNN/DATA/train&evaluate/.gitkeep
+!/GATGNN/DATA/train&evaluate/*/
+/GATGNN/DATA/train&evaluate/*/*
+!/GATGNN/DATA/train&evaluate/*/.gitkeep
+
+# Prediction data-source shells
+!/GATGNN/DATA/prediction/
+/GATGNN/DATA/prediction/*
+!/GATGNN/DATA/prediction/.gitkeep
+!/GATGNN/DATA/prediction/*/
+/GATGNN/DATA/prediction/*/*
+!/GATGNN/DATA/prediction/*/.gitkeep
+
+# Generated output directory shells
 /GATGNN/PREDICTIONS/*
 !/GATGNN/PREDICTIONS/.gitkeep
 /GATGNN/RESULTS/*

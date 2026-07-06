@@ -5,11 +5,11 @@
 # Both map internally to "new-property" but keep saved model filenames as the CLI name.
 #
 # ✅ Added support for:
-#   --data_src CMD  (custom CIF folder: DATA/CIF-DATA_CMD, CIF names: cmd-<id>.cif)
+#   --data_src <folder> (DATA/train&evaluate/<folder>, numeric CIF filenames)
 #   --property density
 #   --property thermal-conductivity
 # ✅ For CMD:
-#   - use_property(prop_arg, "CMD") writes DATA/CIF-DATA_CMD/id_prop.csv with cmd- prefix
+#   - use_property() matches the selected folder's numeric CIF IDs to the property CSV
 #   - edge_format uses "NEW" to stay compatible with internal edge parsing branches
 #   - CIF loader root_dir points to DATA/CIF-DATA_CMD/
 
@@ -31,6 +31,7 @@ from gatgnn.model                  import *
 from gatgnn.pytorch_early_stopping import *
 from gatgnn.file_setter            import use_property
 from gatgnn.utils                  import *
+from gatgnn.interactive_config     import parse_args_interactively, resolve_data_source
 
 
 def main(argv):
@@ -62,7 +63,7 @@ def main(argv):
     parser.add_argument(
         '--data_src',
         default='CGCNN',
-        choices=['CGCNN', 'MEGNET', 'NEW', 'CMD'],
+        choices=None,
         help='selection of the materials dataset to use (default: CGCNN)'
     )
 
@@ -84,7 +85,9 @@ def main(argv):
     parser.add_argument('--train_size', default=0.8, type=float,
                         help='ratio size of the training-set (default:0.8)')
 
-    args = parser.parse_args(argv)
+    # Property CSV files and DATA folders are discovered dynamically.
+    next(action for action in parser._actions if action.dest == 'property').choices = None
+    args = parse_args_interactively(parser, argv, workflow='train')
 
     # -----------------------------
     # Property alias mapping:
@@ -103,7 +106,7 @@ def main(argv):
 
     # ✅ 그래프/엣지 포맷은 기존 분기(NEW)로 태우고, 데이터셋 준비는 CMD로 처리
     # (CMD라는 edge_format을 내부에서 모를 가능성 대비)
-    edge_src = 'NEW' if data_src == 'CMD' else data_src
+    src_CIF, edge_src = resolve_data_source(data_src)
 
     # -----------------------------
     # GATGNN --- parameters
@@ -151,18 +154,14 @@ def main(argv):
     # DATALOADER/ TARGET NORMALIZATION
     # -----------------------------
     # ✅ data_src별 CIF 폴더 선택
-    if data_src == 'CMD':
-        src_CIF = 'CIF-DATA_CMD'
-    elif data_src == 'NEW':
-        src_CIF = 'CIF-DATA_NEW'
-    else:
-        src_CIF = 'CIF-DATA'
-
     dataset = pd.read_csv(
         f'DATA/{src_CIF}/id_prop.csv',
         header=None,
-        names=['material_ids', 'label']
+        names=['material_ids', 'label'],
+        dtype={'material_ids': str}
     ).sample(frac=1, random_state=random_num)
+
+    dataset['material_ids'] = dataset['material_ids'].str.strip().str.replace(r'\.0$', '', regex=True)
 
     NORMALIZER   = DATA_normalizer(dataset.label.values)
     CRYSTAL_DATA = CIF_Dataset(dataset, root_dir=f'DATA/{src_CIF}/', **RSM)

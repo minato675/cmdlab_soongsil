@@ -38,7 +38,7 @@ def resolve_targets(to_predict: str):
         return ids, str(p.parent)
 
     # fallback: treat as cif id name, look in default prediction-directory
-    return [to_predict], "DATA/prediction-directory"
+    return [to_predict], "DATA/prediction/prediction-directory"
 
 
 def get_cif_path(root_dir: str, material_id: str) -> Path:

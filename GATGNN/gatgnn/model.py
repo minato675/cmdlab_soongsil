@@ -6,10 +6,9 @@ import torch.nn.functional as F
 import torch.nn as nn
 
 from torch_geometric.nn.conv  import MessagePassing
-from torch_geometric.utils    import softmax
+from torch_geometric.utils    import softmax, scatter
 from torch_geometric.nn       import global_add_pool
 from torch_geometric.nn       import GATConv
-from torch_scatter            import scatter_add
 from torch_geometric.nn.inits import glorot, zeros
 torch.cuda.empty_cache()
 
@@ -74,7 +73,7 @@ class CLUSTER_Attention(nn.Module):
         for i in range(len(split_x)):
             graph_features = split_x[i]
             clus_t         = split_cls[i].view(-1)
-            cluster_sum    = scatter_add(graph_features,clus_t,0)
+            cluster_sum    = scatter(graph_features, clus_t, dim=0, reduce='sum')
             zero_sum       = torch.zeros_like(cluster_sum)
             if   len(graph_features) == 1: 
                 new_x = torch.cat([new_x,cluster_sum],dim=0)

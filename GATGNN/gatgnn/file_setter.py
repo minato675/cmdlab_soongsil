@@ -2,6 +2,9 @@ import os
 import pandas as pd
 import numpy as np
 from shutil import copyfile
+from pathlib import Path
+
+from gatgnn.interactive_config import resolve_data_source
 
 
 def _ensure_atom_init(cif_dir):
@@ -9,13 +12,17 @@ def _ensure_atom_init(cif_dir):
     if os.path.exists(dst):
         return
 
-    src = os.path.join('DATA', 'CIF-DATA', 'atom_init.json')
-    if os.path.exists(src):
-        copyfile(src, dst)
-        return
+    candidates = [
+        os.path.join('DATA', 'train&evaluate', name, 'atom_init.json')
+        for name in ('CIF-DATA', 'CIF-DATA_CMD', 'CIF-DATA_NEW')
+    ]
+    for src in candidates:
+        if os.path.exists(src):
+            copyfile(src, dst)
+            return
 
     raise FileNotFoundError(
-        f"Missing atom_init.json. Expected '{dst}', and fallback source '{src}' was not found."
+        f"Missing atom_init.json. Expected '{dst}', and no fallback exists under DATA/train&evaluate."
     )
 
 
@@ -65,7 +72,22 @@ def use_property(property_name, source, do_prediction=False):
         filename = 'newyoungsmodulus.csv'     ; p = None ; num_T = None
 
     else:
-        raise ValueError(f"Unknown property_name: {property_name}")
+        # New properties are discovered from DATA/properties-reference/*.csv.
+        # Match either the exact stem or a hyphen/underscore-insensitive stem.
+        property_dir = Path('DATA/properties-reference')
+        normalized = property_name.lower().replace('-', '').replace('_', '')
+        matches = [
+            path for path in property_dir.glob('*.csv')
+            if path.stem.lower().replace('-', '').replace('_', '') == normalized
+        ]
+        if not matches:
+            raise ValueError(
+                f"Unknown property_name: {property_name}. "
+                f"Add DATA/properties-reference/{property_name}.csv first."
+            )
+        filename = matches[0].name
+        p = None
+        num_T = None
 
     # -----------------------------
     # Read property CSV
@@ -83,27 +105,13 @@ def use_property(property_name, source, do_prediction=False):
     # Excel/float로 들어온 "1328.0" 같은 케이스 방지
     df['material_id'] = df['material_id'].str.replace(r'\.0$', '', regex=True)
 
-    # ✅ CMD 데이터셋이면 항상 cmd- prefix 부착 (모든 물성 공통)
-    # (CIF 파일명이 cmd-<id>.cif 형태이므로)
-    if source == 'CMD':
-        df['material_id'] = 'cmd-' + df['material_id']
-
-    # ✅ new_*도 결국 CIF가 cmd-<id>.cif 라는 전제면,
-    # 위 CMD prefix 로직만으로 충분하지만,
-    # NEW/CGCNN에서도 new_*를 쓸 수 있으니 "new_*는 항상 cmd-"를 원하면 아래 유지 가능:
-    if property_name in [
-        'new_bulk-modulus', 'newbulkmodulus', 'new-bulk-modulus',
-        'new_Youngs-modulus', 'newyoungsmodulus', 'new-youngs-modulus'
-    ]:
-        # source가 CMD가 아니어도 new_*는 cmd- CIF를 쓴다는 가정이면 prefix 추가
-        if not df['material_id'].str.startswith('cmd-').all():
-            df['material_id'] = 'cmd-' + df['material_id']
+    # Every training data source uses plain numeric CIF filenames.
 
     # -----------------------------
     # Dataset source handling
     # -----------------------------
-    if source == 'CGCNN':
-        cif_dir = 'CIF-DATA'
+    if source in ['CGCNN', 'CIF-DATA']:
+        cif_dir = os.path.join('train&evaluate', 'CIF-DATA')
         if filename in ['bulkmodulus.csv', 'shearmodulus.csv', 'poissonratio.csv']:
             small = pd.read_csv('DATA/cgcnn-reference/mp-ids-3402.csv', header=None, names=['mp_ids']).values.squeeze()
             df = df[df.material_id.isin(small)]
@@ -119,7 +127,7 @@ def use_property(property_name, source, do_prediction=False):
         CIF_dict = {'radius': 8, 'step': 0.2, 'max_num_nbr': 12}
 
     elif source == 'MEGNET':
-        cif_dir = 'CIF-DATA'
+        cif_dir = os.path.join('train&evaluate', 'CIF-DATA')
         megnet_df = pd.read_csv('DATA/megnet-reference/megnet.csv')
 
         if p is None:
@@ -131,21 +139,59 @@ def use_property(property_name, source, do_prediction=False):
         df = df[df.material_id.isin(use_ids)]
         CIF_dict = {'radius': 4, 'step': 0.5, 'max_num_nbr': 16}
 
-    elif source == 'CMD':
-        cif_dir = 'CIF-DATA_CMD'
+    elif source in ['CMD', 'CIF-DATA_CMD']:
+        cif_dir = os.path.join('train&evaluate', 'CIF-DATA_CMD')
         CIF_dict = {'radius': 8, 'step': 0.2, 'max_num_nbr': 12}
 
         # atom_init.json 필요하면 복사 (CMD 폴더에 없을 때 대비)
         _ensure_atom_init(cif_dir)
 
-    elif source == 'NEW':
-        cif_dir = 'CIF-DATA_NEW'
+    elif source in ['NEW', 'CIF-DATA_NEW']:
+        cif_dir = os.path.join('train&evaluate', 'CIF-DATA_NEW')
         CIF_dict = {'radius': 8, 'step': 0.2, 'max_num_nbr': 12}
 
         _ensure_atom_init(cif_dir)
 
     else:
-        raise ValueError(f"Unknown source: {source}")
+        cif_dir, _ = resolve_data_source(source)
+        if not os.path.isdir(os.path.join('DATA', cif_dir)):
+            raise ValueError(f"Unknown source directory: DATA/{cif_dir}")
+        CIF_dict = {'radius': 8, 'step': 0.2, 'max_num_nbr': 12}
+        _ensure_atom_init(cif_dir)
+
+    # Build the training table from the CIF files that actually exist in the
+    # selected data-source folder. CIF filenames must be plain numeric IDs.
+    cif_root = Path('DATA') / cif_dir
+    cif_files = list(cif_root.glob('*.cif')) + list(cif_root.glob('*.cif.gz'))
+    invalid_names = []
+    available_ids = set()
+    for cif_path in cif_files:
+        cif_id = cif_path.name[:-7] if cif_path.name.endswith('.cif.gz') else cif_path.stem
+        if not cif_id.isdigit():
+            invalid_names.append(cif_path.name)
+        else:
+            available_ids.add(cif_id)
+
+    if invalid_names:
+        preview = ', '.join(invalid_names[:10])
+        raise ValueError(
+            f"All CIF filenames in DATA/{cif_dir} must be numeric. "
+            f"Invalid files: {preview}"
+        )
+    if not available_ids:
+        raise FileNotFoundError(f"No numeric CIF files found in DATA/{cif_dir}")
+
+    reference_count = len(df)
+    df = df[df['material_id'].isin(available_ids)].copy()
+    if df.empty:
+        raise ValueError(
+            f"No matching IDs between DATA/properties-reference/{filename} "
+            f"and DATA/{cif_dir}"
+        )
+    print(
+        f"> Selected {len(df)} matching samples from {len(available_ids)} CIF files "
+        f"and {reference_count} property rows."
+    )
 
     # -----------------------------
     # Additional cleaning

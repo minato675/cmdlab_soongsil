@@ -1,136 +1,362 @@
-# GATGNN: Global Attention Graph Neural Network
-This software package implements our developed model GATGNN for improved inorganic materials' property prediction. This is the official Pytorch repository. 
+# GATGNN 학습·평가·예측 작업 매뉴얼
 
-## This model is outdated. If you want to compare with our latest model, check our DeeperGATGNN [here](https://github.com/usccolumbia/deeperGATGNN) which has achieved significantly better performance.
+[한국어](README.md) | [English](README_EN.md)
 
-[Machine Learning and Evolution Laboratory](http://mleg.cse.sc.edu)<br />
-Department of Computer Science and Engineering <br />
-University of South Carolina <br />
+이 폴더에서는 CIF 결정 구조와 물성 CSV를 이용해 GATGNN 모델을 학습하고, 학습 모델을 평가하거나 새로운 CIF의 물성을 예측한다.
 
-How to cite:<br />
-Louis, Steph-Yves, Yong Zhao, Alireza Nasiri, Xiran Wang, Yuqi Song, Fei Liu, and Jianjun Hu*. "Graph convolutional neural networks with global attention for improved materials property prediction." Physical Chemistry Chemical Physics 22, no. 32 (2020): 18141-18148.
+현재 작업 흐름은 다음과 같다.
 
-# Table of Contents
-* [Introduction](#introduction)
-* [Installation](#installation)
-* [Dataset](#dataset)
-* [Usage](#usage)
-* [Usage for custom property & custom Dataset](#usage2)
-
-# Performance summary
-Property | MAE Performance of our model| Units
------------- | ------------- | -------------
-Formation Energy | 0.039 | eV/atom
-Absolute Energy | 0.048 | eV/atom
-Fermi Energy | 0.33 | eV/atom
-Band Gap | 0.31 | eV
-Bulk-Moduli | 0.045 | log(GPa)
-Shear-Moduli | 0.075 | log(GPa)
-Poisson-ratio | 0.029 | -
-   
-<a name="introduction"></a>
-# Introduction
-The package provides 3 major functions:
-
-- Train a GATGNN model for either of the 7 properties referenced above.
-- Evaluate the performance of a trained GATGNN model on either of the 7 properties referenced above.
-- Predict the property of a given material using its cif file. 
-
-The following paper describes the details of the our framework:
-[GLOBAL ATTENTION BASED GRAPH CONVOLUTIONAL NEURAL NETWORKS FOR IMPROVED MATERIALS PROPERTY PREDICTION](https://arxiv.org/pdf/2003.13379.pdf)
-
-
-
-![](front-pic.png)
-<a name="installation"></a>
-## Installation
-Install any of the relevant packages if not already installed:
-* Pytorch (tested on 1.2.0) - preferably version 1.2.0 or later
-* Numpy   (tested on 1.17.3)
-* Pandas  (tested on 0.21.3) 
-* Scikit-learn (tested on 0.21.3) 
-* Pytmatgen (tested on 2019.10.16)
-* PyTorch-Geometric (tested on 1.1.2)
-
-- Pytorch, Numpy, Pandas, Scikit-learn, and Pymatgen
-```bash
-pip install torch torchvision 
-pip install numpy
-pip install pandas
-pip install scikit-learn
-pip install pymatgen
-```
-- PyTorch Geometric (1.6.1) [documentation](https://pytorch-geometric.readthedocs.io/en/latest/notes/installation.html). *our codes are compatible with version up to 1.6.\**
-
-<a name="dataset"></a>
-## Dataset
-1. Download the compressed file of our dataset using [this link](https://widgets.figshare.com/articles/12522524/embed?show_title=1)
-2. Unzip its content ( a directory named 'DATA')
-3. Move the DATA directory in your GATGNN directory. i.e. such that the path GATGNN/DATA now exists.
-
-<a name="usage"></a>
-## Usage
-#### Training a new model
-Once all the aforementionned requirements are satisfied, one can easily train a new GATGNN by running __train.py__ in the terminal along with the specification of the appropriate flags. At the bare minimum, using --property to specify the property and --data_src to identify the dataset (CGCNN or MEGNET) should be enough to train a robust GATGNN model.
-- Example-1. Train a model on the bulk-modulus property using the CGCNN dataset.
-```bash
-python train.py --property bulk-modulus --data_src CGCNN
-```
-- Example-2. Train a model on the shear-modulus property using the MEGNET dataset.
-```bash
-python train.py --property shear-modulus --data_src MEGNET
-```
-- Example-3. Train a model with 5 layers on the bulk-modulus property using the CGCNN dataset and the global attention technique of fixed cluster unpooling (GI M-2).
-```bash
-python train.py --property bulk-modulus --data_src CGCNN --num_layers 5 --global_attention cluster --cluster_option fixed
-``` 
-The trained model will be automatically saved under the TRAINED directory. *Pay attention to the flags used for they will be needed again to evaluate the model.
-
-#### Evaluating the performance of a trained model
-Upon training a GATGNN, one can evaluate its performance using __evaluate.py__ in the terminal exactly the same way as __train.py__. *It is IMPORTANT that one runs __evaluate.py__ with the exact same flags as it was done when prior training the model.*
-- Example-1. Evaluate the performance of a model trained on the bulk-modulus property using the CGCNN dataset.
-```bash
-python evaluate.py --property bulk-modulus --data_src CGCNN
-```
-- Example-2. Evaluate the performance of a model trained on the shear-modulus property using the MEGNET dataset.
-```bash
-python evaluate.py --property shear-modulus --data_src MEGNET
-```
-- Example-3.  Evaluate the performance of a model trained with 5 layers on the bulk-modulus property using the CGCNN dataset and the global attention technique of fixed cluster unpooling (GI M-2).
-```bash
-python evaluate.py --property bulk-modulus --data_src CGCNN --num_layers 5 --global_attention cluster --cluster_option fixed
-```
-#### Predicting the property of a single inorganic material using its .cif file
-Again, using a trained model one can also predict the property of a single inorganic material using its .cif file. Just follow those 2 steps:
-1. Place your .cif file inside the directory DATA/prediction-directory/
-1. Run __predict.py__ in a similar fashion as __evaluate.py__ except for the addition of the flag --to_predict which specifies the name of the .cif file.
-- Example-1. Predict the bulk-modulus property of a material named mp-1 using the CGCNN graph constructing specifications.
-```bash
-python predict.py --property bulk-modulus --data_src CGCNN --to_predict mp-1
-```
-- Example-2. Predict the shear-modulus property of a material named mp-1 using the MEGNET graph constructing specifications.
-```bash
-python predict.py --property shear-modulus --data_src MEGNET --to_predict mp-1
+```text
+학습 CIF + DATA/properties-reference/<물성>.csv
+  → DATA/<데이터셋>/id_prop.csv 자동 생성
+  → train.py
+  → TRAINED/<property>.pt
+  → evaluate.py → RESULTS/<property>_results.csv
+  → predict.py  → PREDICTIONS/pred_<property>_<source>_<target>.csv
 ```
 
-<a name="usage2"></a>
-## Usage for custom property & custom Dataset
-Once you've followed the steps to download and unzip the dataset, follow the 3 following steps:
-1. Place all of your .cif files in the directory DATA/CIF-DATA_NEW
-1. First format your .csv property dataset so it only has 2 columns (ID, value). Your file should look like anyone of our .csv files located in the the directory DATA/properties-reference/
-1. Once your .csv property dataset is correctly formatted, rename your file as newproperty.csv and place it in the DATA/properties_reference/ directory. 
+## 1. 주요 폴더
 
-With the 3 steps above complete, you are now ready to use our GATGNN on your own dataset. To either [train](#usage), [evaluate](#usage), or even [predict](#usage) your own property, refer to the instructions listed in the [Usage](#usage) section. Just use new-property, NEW, and any ratio (like 0.75) as values for the --property flag, --data_src flag, and --train_size flag. 3 examples are provided below
-- Example-1. To train a new GATGNN on your property
-```bash
+| 경로 | 용도 | Git 추적 |
+| --- | --- | --- |
+| `DATA/train&evaluate/<data_src>/` | 학습·평가용 CIF 데이터 소스 | 폴더만 포함 |
+| `DATA/prediction/<data_src>/` | 예측할 조성의 CIF 데이터 소스 | 폴더만 포함 |
+| `DATA/properties-reference/` | 물성별 ID-값 CSV | 포함 |
+| `TRAINED/` | 학습 모델 체크포인트 | 현재 모델 저장 위치 |
+| `RESULTS/` | 평가 결과 CSV | 폴더만 포함 |
+| `PREDICTIONS/` | 예측 결과 CSV | 폴더만 포함 |
+
+`DATA`에는 위 세 폴더만 둔다. `properties-reference`의 CSV는 Git에 포함하며, 나머지 data source 폴더는 `.gitkeep`만 포함하고 실제 CIF는 로컬에서 관리한다.
+
+## 2. 실행 환경
+
+모든 명령은 상대 경로를 사용하므로 반드시 `C:\work\GATGNN`에서 실행한다.
+
+```powershell
+cd C:\work\GATGNN
+```
+
+필수 Python 패키지는 다음과 같다.
+
+- PyTorch
+- PyTorch Geometric
+- NumPy, pandas, scikit-learn
+- pymatgen
+- tabulate
+
+PyTorch와 PyTorch Geometric 계열 패키지는 CPU/CUDA 및 각 패키지 버전이 서로 맞아야 한다. 기존에 계산이 검증된 가상환경을 우선 사용한다.
+
+기본 import 확인:
+
+```powershell
+python -c "import torch, torch_geometric, pymatgen, pandas, sklearn; print('GATGNN ready')"
+```
+
+GPU 사용 여부 확인:
+
+```powershell
+python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
+```
+
+스크립트는 CUDA가 있으면 `cuda:0`, 없으면 CPU를 선택한다.
+
+## 3. 지원 물성과 파일명
+
+`--property` 값에 따라 `DATA/properties-reference`에서 다음 CSV를 읽는다.
+
+| `--property` | 참조 CSV | 모델 파일 |
+| --- | --- | --- |
+| `bulk-modulus` | `bulkmodulus.csv` | `TRAINED/bulk-modulus.pt` |
+| `shear-modulus` | `shearmodulus.csv` | `TRAINED/shear-modulus.pt` |
+| `poisson-ratio` | `poissonratio.csv` | `TRAINED/poisson-ratio.pt` |
+| `density` | `density.csv` | `TRAINED/density.pt` |
+| `thermal-conductivity` | `thermalconductivity.csv` | `TRAINED/thermal-conductivity.pt` |
+| `new-property` | `newproperty.csv` | `TRAINED/new-property.pt` |
+| `new_bulk-modulus` | `newbulkmodulus.csv` | `TRAINED/new_bulk-modulus.pt` |
+| `new_Youngs-modulus` | `newyoungsmodulus.csv` | `TRAINED/new_Youngs-modulus.pt` |
+
+그 밖에 `absolute-energy`, `band-gap`, `fermi-energy`, `formation-energy`도 지원한다.
+
+참조 CSV에는 헤더 없이 두 열만 둔다.
+
+```csv
+6794,7.81
+6904,8.03
+6905,7.95
+```
+
+첫 번째 열은 CIF ID, 두 번째 열은 숫자 물성값이다. 빈 값과 문자열 `None`은 제거된다.
+
+## 4. 데이터 소스 규칙
+
+### CMD
+
+현재 사용자 데이터의 주된 형식이다.
+
+- CIF 위치: `DATA/train&evaluate/CIF-DATA_CMD/`
+- CIF 이름: `<숫자 ID>.cif`
+- 참조 CSV의 ID: 접두사 없는 `<ID>`
+- 실행 옵션: `--data_src CMD`
+
+예를 들어 CSV의 ID가 `6794`이면 CIF 파일은 `6794.cif`여야 한다. 선택한 폴더에서 CSV ID와 일치하는 CIF만 학습에 자동 사용된다.
+
+### NEW
+
+- CIF 위치: `DATA/train&evaluate/CIF-DATA_NEW/`
+- 실행 옵션: `--data_src NEW`
+- 사용자 정의 물성에는 일반적으로 `new-property`를 사용한다.
+
+### CGCNN / MEGNET
+
+- CIF 위치: `DATA/train&evaluate/CIF-DATA/`
+- 실행 옵션: 각각 `--data_src CGCNN`, `--data_src MEGNET`
+- 원본 참조 데이터와 필터 파일이 필요하다.
+
+각 학습 data source에는 `atom_init.json`이 필요하다. 파일이 없으면 코드가 `DATA/train&evaluate`의 기존 기본 데이터 소스에서 자동 복사한다.
+
+## 5. 학습 데이터 준비
+
+### 대화형 실행
+
+`train.py`, `evaluate.py`, `predict.py`를 옵션 없이 실행하면 단계별 설정 메뉴가 열린다.
+
+```powershell
+python train.py
+python evaluate.py
+python predict.py
+```
+
+1. `DATA/properties-reference/*.csv`에서 발견한 물성을 번호로 선택한다.
+2. 학습·평가는 `DATA/train&evaluate`, 예측은 `DATA/prediction` 아래의 data source 폴더를 선택한다.
+3. 나머지 옵션은 값을 직접 입력하거나 Enter를 눌러 표시된 기본값을 사용한다.
+
+새 물성을 추가하려면 헤더 없는 `ID,값` 형식의 `<새물성>.csv`를 `DATA/properties-reference/`에 넣고 스크립트를 다시 실행한다. 새 CSV의 파일명이 메뉴에 자동으로 나타나며 기본 회귀 물성으로 처리된다. 기존 명령행 방식도 계속 사용할 수 있다.
+
+```powershell
+python train.py --property 새물성 --data_src CIF-DATA_CMD
+```
+
+### 데이터 준비 예시
+
+예: CMD 밀도 모델을 학습하는 경우
+
+1. `DATA/properties-reference/density.csv`를 준비한다.
+2. 대응하는 `<숫자 ID>.cif`를 선택할 `DATA/train&evaluate/<data_src>/`에 넣는다.
+3. CSV의 모든 ID에 대응하는 CIF가 존재하는지 확인한다.
+4. 다른 프로그램에서 `id_prop.csv`를 열어 두었다면 닫는다.
+
+`train.py`, `evaluate.py`, `predict.py`가 실행될 때 `file_setter.py`가 다음 파일을 자동 생성하거나 덮어쓴다.
+
+```text
+DATA/train&evaluate/CIF-DATA_CMD/id_prop.csv
+```
+
+따라서 이 파일을 Excel에서 열어 둔 상태로 실행하면 `PermissionError`가 발생할 수 있다.
+
+## 6. 모델 학습
+
+기본 CMD 학습 예시:
+
+```powershell
+python train.py --property density --data_src CMD
+```
+
+현재 사용하는 물성별 예시:
+
+```powershell
+python train.py --property thermal-conductivity --data_src CMD
+python train.py --property poisson-ratio --data_src CMD
+python train.py --property new_bulk-modulus --data_src CMD
+python train.py --property new_Youngs-modulus --data_src CMD
+```
+
+NEW 사용자 정의 데이터 예시:
+
+```powershell
 python train.py --property new-property --data_src NEW --train_size 0.8
 ```
-- Example-2. Evaluate the performance of a model trained on your property.
-```bash
-python evaluate.py --property new-property --data_src NEW --train_size 0.8
-```
-- Example-3. Predict the value of your property for a material named mp-1.
-```bash
-python predict.py --property new-property --data_src NEW --to_predict mp-1
+
+기본 학습 설정은 코드에 고정되어 있다.
+
+- 최대 epoch: 200
+- batch size: 256
+- learning rate: `5e-3`
+- optimizer: AdamW
+- early stopping patience: 150
+- random seed: 456
+- 기본 train 비율: 0.8 (`training_num`이 정해진 기존 데이터는 코드 설정 우선)
+
+학습 중 최적 체크포인트는 `TRAINED/crystal-checkpoint.pt`에 저장되고, 종료 후 다음 이름으로 복사된다.
+
+```text
+TRAINED/<property>.pt
 ```
 
+같은 `--property`로 다시 학습하면 기존 모델을 덮어쓸 수 있으므로 필요한 모델은 먼저 백업한다.
+
+## 7. 모델 평가
+
+학습 때 사용한 옵션과 동일한 모델 구조 옵션을 사용해야 한다.
+
+```powershell
+python evaluate.py --property density --data_src CMD
+```
+
+결과는 다음 위치에 저장된다.
+
+```text
+RESULTS/density_results.csv
+```
+
+CSV에는 material ID, 실제값, 예측값, 원자 수 및 데이터 인덱스가 기록된다.
+
+레이어 수나 attention 설정을 바꾸어 학습했다면 평가에도 그대로 전달한다.
+
+```powershell
+python evaluate.py --property density --data_src CMD --num_layers 5 --global_attention cluster --cluster_option fixed
+```
+
+모델 구조 옵션이 학습 때와 다르면 체크포인트 로딩 시 크기 불일치 오류가 발생한다.
+
+## 8. 새로운 CIF 물성 예측
+
+`predict.py --to_predict`는 세 가지 입력 방식을 지원한다.
+
+### 폴더 전체 예측
+
+```powershell
+python predict.py --property density --data_src prediction-directory
+```
+
+폴더 바로 아래의 모든 `.cif`, `.cif.gz`를 정렬하여 예측한다.
+
+### CIF 파일 하나 예측
+
+```powershell
+python predict.py --property density --data_src prediction-directory --to_predict DATA\prediction\prediction-directory\6794.cif
+```
+
+### 기본 폴더에 있는 ID 하나 예측
+
+```powershell
+python predict.py --property density --data_src CMD --to_predict 6794
+```
+
+마지막 방식의 기본 경로는 `DATA/prediction/prediction-directory/6794.cif` 또는 `.cif.gz`이다.
+
+출력 예:
+
+```text
+PREDICTIONS/pred_density_CMD_prediction-directory.csv
+```
+
+출력 CSV 형식:
+
+```csv
+material_id,prediction
+6794,7.812345
+```
+
+예측할 때도 학습 당시의 `--property`, `--data_src` 및 모델 구조 옵션을 동일하게 사용한다.
+
+## 9. CIF 부피 계산
+
+`volume_predict.py`는 GATGNN 모델을 사용하지 않고 pymatgen으로 CIF unit-cell 부피를 계산한다.
+
+```powershell
+python volume_predict.py --to_predict DATA\prediction\prediction-directory
+```
+
+파일 하나 또는 ID 하나도 `predict.py`와 같은 방식으로 지정할 수 있다.
+
+```powershell
+python volume_predict.py --to_predict DATA\prediction\prediction-directory\6794.cif
+python volume_predict.py --to_predict 6794
+```
+
+기본 출력 위치:
+
+```text
+PREDICTIONS/volume_prediction-directory.csv
+```
+
+다른 출력 폴더를 사용하려면 `--out_dir`을 지정한다.
+
+## 10. 주요 명령 옵션
+
+| 옵션 | 기본값 | 설명 |
+| --- | --- | --- |
+| `--property` | `bulk-modulus` | 학습·평가·예측할 물성 |
+| `--data_src` | `CGCNN` | `CGCNN`, `MEGNET`, `NEW`, `CMD` |
+| `--to_predict` | 선택한 `DATA/prediction/<data_src>` | 예측 ID, CIF 파일 또는 폴더 |
+| `--num_layers` | 3 | AGAT 레이어 수 |
+| `--num_neurons` | 64 | 레이어당 뉴런 수 |
+| `--num_heads` | 4 | attention head 수 |
+| `--global_attention` | `composition` | `composition` 또는 `cluster` |
+| `--cluster_option` | `fixed` | `fixed`, `random`, `learnable` |
+| `--train_size` | 0.8 | 학습 데이터 비율 |
+
+`--use_hidden_layers`와 `--concat_comp`는 현재 `argparse`에서 `type=bool`을 사용한다. 문자열 `False`도 기대와 다르게 참으로 해석될 수 있으므로 기본값을 바꿔야 한다면 명령행보다 코드 설정을 확인한다.
+
+## 11. 권장 전체 작업 순서
+
+CMD 밀도 모델의 한 사이클:
+
+```powershell
+cd C:\work\GATGNN
+
+# 1. 학습
+python train.py --property density --data_src CMD
+
+# 2. 평가
+python evaluate.py --property density --data_src CMD
+
+# 3. 새 CIF 일괄 예측
+python predict.py --property density --data_src prediction-directory
+
+# 4. 필요 시 부피 계산
+python volume_predict.py --to_predict DATA\prediction\prediction-directory
+```
+
+## 12. 문제 해결
+
+### `Missing atom_init.json`
+
+선택한 학습 data source 또는 `DATA/train&evaluate`의 기본 데이터 소스에 `atom_init.json`이 필요하다.
+
+### CIF를 찾지 못함
+
+- 모든 학습 CIF가 `<숫자 ID>.cif` 형식인지 확인한다.
+- 예측 ID 방식은 선택한 `DATA/prediction/<data_src>/<ID>.cif`를 찾는다.
+- 명령을 `C:\work\GATGNN`에서 실행했는지 확인한다.
+
+### `Permission denied ... id_prop.csv`
+
+Excel이나 편집기에서 해당 `id_prop.csv`를 닫고 다시 실행한다.
+
+### 모델 체크포인트가 없음
+
+`TRAINED/<property>.pt`가 존재하는지 확인한다. `--property`의 대소문자와 밑줄·하이픈까지 파일명과 일치해야 한다.
+
+### 체크포인트 크기 불일치
+
+학습, 평가, 예측에 사용한 `num_layers`, `num_neurons`, `num_heads`, attention 옵션이 동일한지 확인한다.
+
+### CUDA 메모리 부족
+
+`train.py`의 `batch_size`를 줄인다. 현재 batch size는 명령행 옵션이 아니라 코드에 고정되어 있다.
+
+### CSV 값 오류
+
+참조 CSV는 헤더 없는 2열 형식이어야 한다. ID와 물성값 사이에 불필요한 쉼표가 없는지, 물성값이 숫자인지 확인한다.
+
+## 13. 실행 체크리스트
+
+- [ ] `C:\work\GATGNN`에서 명령 실행
+- [ ] 물성명과 참조 CSV 파일명 확인
+- [ ] 참조 CSV ID와 CIF 파일명 대응 확인
+- [ ] `atom_init.json` 확인
+- [ ] 기존 `TRAINED/<property>.pt` 백업 여부 확인
+- [ ] 학습과 평가·예측의 모델 옵션 일치
+- [ ] `RESULTS/` 평가값 검토
+- [ ] `PREDICTIONS/` 예측 결과 검토
