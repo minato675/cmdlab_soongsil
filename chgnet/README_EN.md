@@ -157,9 +157,70 @@ The script processes one structure at a time. If memory is still insufficient, s
 
 ## Usage manual
 
-See the [root usage manuals](../README_EN.md#usage-manuals) for installation and the complete CHGNet-to-GATGNN workflow. The minimum CHGNet command is:
+### What does CHGNet do?
+
+CHGNet reads atoms and lattice data from CIF files, predicts energies and forces, and relaxes the atoms and cell toward lower-force configurations. This repository processes every CIF in `Element/` and writes results to `opt_cif/`.
+
+### First run
+
+1. Create the environment and install packages from the repository root.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+2. Copy input CIF files into `chgnet/Element/`. Keep a separate backup of important originals.
+3. Confirm the layout:
+
+```text
+chgnet/
+├─ Element/
+│  ├─ 1001.cif
+│  └─ 1002.cif
+├─ opt_cif/
+└─ optimizer.py
+```
+
+4. From the repository root, enter the CHGNet directory and run:
 
 ```powershell
 cd chgnet
 python optimizer.py
 ```
+
+5. Confirm that the terminal reports the start and completion of each file.
+6. Check that files such as `opt_cif/1001.cif` and `opt_cif/1002.cif` were created.
+
+### Important behavior before running
+
+- The current code does not relax the untouched input directly. It first applies 10% strain along each axis and perturbs atomic positions by `0.005`.
+- Output names match input names, so existing results may be overwritten.
+- One invalid CIF may stop the entire batch. Move a failing file aside before retrying.
+- CHGNet produces model predictions. Validate research-critical structures with an independent method such as DFT.
+
+### How to validate results
+
+1. Compare input and output CIF counts.
+2. Open output files in VESTA or pymatgen and inspect for overlapping atoms or abnormal cells.
+3. Review logs for tracebacks, isolated-atom warnings, or convergence problems.
+4. Confirm that each filename corresponds to the intended structure.
+
+```powershell
+(Get-ChildItem .\Element -Filter *.cif).Count
+(Get-ChildItem .\opt_cif -Filter *.cif).Count
+```
+
+### Next step
+
+To predict properties with GATGNN, return to the repository root and copy optimized files into a prediction source.
+
+```powershell
+cd ..
+New-Item -ItemType Directory -Force .\GATGNN\DATA\prediction\my-samples
+Copy-Item .\chgnet\opt_cif\*.cif .\GATGNN\DATA\prediction\my-samples\
+```
+
+See the [root beginner workflow](../README_EN.md#usage-manuals) for the complete pipeline.

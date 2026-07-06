@@ -159,9 +159,70 @@ CIF 문법, 원소 기호, 점유율 또는 비정상적인 격자 정보를 확
 
 ## 사용 매뉴얼
 
-저장소 전체 설치와 CHGNet→GATGNN 연계 흐름은 [루트 사용 매뉴얼](../README.md#사용-매뉴얼)을 참고한다. CHGNet만 실행하는 최소 명령은 다음과 같다.
+### CHGNet은 무엇을 하는가?
+
+CHGNet은 CIF에 기록된 원자와 격자 구조를 입력받아 에너지와 힘을 계산하고, 힘이 작아지는 방향으로 원자 위치와 셀을 완화한다. 이 저장소에서는 여러 CIF를 `Element/`에서 읽어 `opt_cif/`로 일괄 저장한다.
+
+### 처음 실행하기
+
+1. 저장소 루트에서 가상환경을 만들고 패키지를 설치한다.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+2. 최적화할 CIF를 `chgnet/Element/`에 복사한다. 원본 보존을 위해 중요한 CIF는 별도 백업한다.
+3. `Element/`와 `opt_cif/`가 다음처럼 보이는지 확인한다.
+
+```text
+chgnet/
+├─ Element/
+│  ├─ 1001.cif
+│  └─ 1002.cif
+├─ opt_cif/
+└─ optimizer.py
+```
+
+4. 저장소 루트에서 CHGNet 폴더로 이동해 실행한다.
 
 ```powershell
 cd chgnet
 python optimizer.py
 ```
+
+5. 터미널에 각 파일의 처리 시작과 완료 메시지가 표시되는지 확인한다.
+6. `opt_cif/1001.cif`, `opt_cif/1002.cif`가 생성됐는지 확인한다.
+
+### 실행 전에 반드시 알아둘 점
+
+- 현재 코드는 원본 구조를 바로 최적화하지 않는다. 먼저 각 축에 10% strain을 주고 원자 위치를 `0.005`만큼 교란한다.
+- 출력 파일명은 입력과 동일하다. 같은 이름의 결과가 있으면 덮어쓸 수 있다.
+- CIF 하나가 잘못되면 전체 배치가 중단될 수 있다. 실패한 파일은 다른 폴더로 옮긴 후 다시 실행한다.
+- CHGNet 결과는 계산 예측이다. 중요한 연구 결과에는 DFT 등 별도 방법으로 검증한다.
+
+### 결과가 정상인지 확인하는 방법
+
+1. 입력과 출력 CIF 수를 비교한다.
+2. VESTA 또는 pymatgen으로 출력 CIF를 열어 원자 겹침이나 비정상 셀이 없는지 확인한다.
+3. 계산 로그에 traceback, isolated atom, 수렴 실패 경고가 없는지 확인한다.
+4. 동일한 이름의 파일이 예상한 구조에서 만들어졌는지 확인한다.
+
+```powershell
+(Get-ChildItem .\Element -Filter *.cif).Count
+(Get-ChildItem .\opt_cif -Filter *.cif).Count
+```
+
+### 다음 단계
+
+최적화된 CIF의 물성을 GATGNN으로 예측하려면 저장소 루트로 돌아가 결과를 예측 폴더에 복사한다.
+
+```powershell
+cd ..
+New-Item -ItemType Directory -Force .\GATGNN\DATA\prediction\my-samples
+Copy-Item .\chgnet\opt_cif\*.cif .\GATGNN\DATA\prediction\my-samples\
+```
+
+전체 연계 과정은 [루트 초보자 사용 매뉴얼](../README.md#사용-매뉴얼)을 참고한다.

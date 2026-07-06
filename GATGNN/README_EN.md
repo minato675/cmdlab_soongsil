@@ -173,16 +173,16 @@ Keeping this file open in Excel may cause a `PermissionError`.
 Basic CMD training example:
 
 ```powershell
-python train.py --property density --data_src CMD
+python train.py --property density --data_src CIF-DATA_CMD
 ```
 
 Examples for properties currently used in this repository:
 
 ```powershell
-python train.py --property thermal-conductivity --data_src CMD
-python train.py --property poisson-ratio --data_src CMD
-python train.py --property new_bulk-modulus --data_src CMD
-python train.py --property new_Youngs-modulus --data_src CMD
+python train.py --property thermal-conductivity --data_src CIF-DATA_CMD
+python train.py --property poisson-ratio --data_src CIF-DATA_CMD
+python train.py --property new_bulk-modulus --data_src CIF-DATA_CMD
+python train.py --property new_Youngs-modulus --data_src CIF-DATA_CMD
 ```
 
 Custom NEW dataset example:
@@ -214,7 +214,7 @@ Training the same property again may overwrite the existing model. Back up impor
 Evaluation must use the same architecture options that were used for training.
 
 ```powershell
-python evaluate.py --property density --data_src CMD
+python evaluate.py --property density --data_src CIF-DATA_CMD
 ```
 
 The result is written to:
@@ -228,7 +228,7 @@ The CSV contains the material ID, measured value, predicted value, number of ato
 If training used custom attention or layer settings, repeat them during evaluation:
 
 ```powershell
-python evaluate.py --property density --data_src CMD --num_layers 5 --global_attention cluster --cluster_option fixed
+python evaluate.py --property density --data_src CIF-DATA_CMD --num_layers 5 --global_attention cluster --cluster_option fixed
 ```
 
 Using a different architecture causes checkpoint size-mismatch errors.
@@ -254,7 +254,7 @@ python predict.py --property density --data_src prediction-directory --to_predic
 ### Predict one ID from the default directory
 
 ```powershell
-python predict.py --property density --data_src CMD --to_predict 6794
+python predict.py --property density --data_src prediction-directory --to_predict 6794
 ```
 
 The default ID form looks for `DATA/prediction/prediction-directory/6794.cif` or `.cif.gz`.
@@ -321,10 +321,10 @@ One complete CMD density cycle:
 cd GATGNN
 
 # 1. Train
-python train.py --property density --data_src CMD
+python train.py --property density --data_src CIF-DATA_CMD
 
 # 2. Evaluate
-python evaluate.py --property density --data_src CMD
+python evaluate.py --property density --data_src CIF-DATA_CMD
 
 # 3. Predict a directory of new CIF files
 python predict.py --property density --data_src prediction-directory
@@ -378,13 +378,134 @@ The reference CSV must have two columns and no header. Check for extra commas an
 
 ## Usage manual
 
-Run the scripts without arguments to select a property and data-source directory through the interactive menu.
+### GATGNN terminology
+
+- **property**: The target learned or predicted by the model, such as density or thermal conductivity.
+- **data source**: A directory grouping CIF files for training or prediction.
+- **CIF ID**: The numeric identifier used as a training filename; `1328.cif` has ID `1328`.
+- **reference CSV**: A file containing the known target value for each CIF ID.
+- **checkpoint**: Learned model parameters stored as `TRAINED/<property>.pt`.
+- **epoch**: One complete pass over the training dataset.
+
+### Step 1: Install the environment
+
+Run once from the repository root:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+For each new PowerShell session, activate the environment again from the repository root, then enter GATGNN:
 
 ```powershell
 cd GATGNN
-python train.py
-python evaluate.py
+```
+
+### Step 2: Predict with an existing model
+
+This is the simplest first-time workflow.
+
+1. Confirm that the property checkpoint exists in `TRAINED/`; density requires `TRAINED/density.pt`.
+2. Create a named batch directory under `DATA/prediction/`.
+3. Put `.cif` or `.cif.gz` files in that directory.
+
+```text
+DATA/prediction/my-samples/
+├─ sample-a.cif
+└─ sample-b.cif
+```
+
+4. Start interactive prediction:
+
+```powershell
 python predict.py
 ```
 
-See the [root usage manuals](../README_EN.md#usage-manuals) for the complete workflow beginning with CHGNet optimization.
+5. Select the property in the first menu.
+6. Select `my-samples` in the second menu.
+7. Press Enter for architecture defaults if the checkpoint was trained with defaults.
+8. Open `PREDICTIONS/pred_<property>_<data_src>_<target>.csv`.
+
+The prediction CSV contains:
+
+| Column | Meaning |
+| --- | --- |
+| `material_id` | CIF filename without its extension |
+| `prediction` | Model-predicted property value |
+
+### Step 3: Prepare training data
+
+This is needed only for training a new model.
+
+1. Create a source directory under `DATA/train&evaluate/`.
+2. Name every training structure `<numeric ID>.cif`. Names such as `cmd-1328.cif` and `sample.cif` are rejected.
+3. Create `DATA/properties-reference/<property>.csv`.
+4. Write `numeric ID,property value` without a header.
+
+```text
+DATA/train&evaluate/my-training-data/
+├─ 1328.cif
+├─ 1329.cif
+└─ atom_init.json
+```
+
+```csv
+1328,107.68
+1329,137.49
+```
+
+A file named `my-property.csv` appears as `my-property` in the property menu. The code intersects the selected directory's actual CIF IDs with CSV IDs and automatically generates `id_prop.csv` from matching rows only.
+
+If `atom_init.json` is missing, the code copies it from an existing default training source. Provide a valid file manually if no fallback exists.
+
+### Step 4: Train a model
+
+```powershell
+python train.py
+```
+
+Answer the interactive questions:
+
+1. **property**: Select the target CSV.
+2. **data_src**: Select the prepared training directory.
+3. **layers / neurons / heads**: Model capacity; beginners should press Enter for defaults.
+4. **attention options**: Use defaults for the first run.
+5. **train size**: The training fraction; `0.8` means 80%.
+
+Before training, verify that `Selected ... matching samples` reports the expected sample count. Training prints per-epoch training and validation losses. The completed model is stored as `TRAINED/<property>.pt`.
+
+Training the same property again may overwrite the checkpoint. Back up important models first.
+
+### Step 5: Evaluate the model
+
+```powershell
+python evaluate.py
+```
+
+Select exactly the same property, source, layers, neurons, heads, and attention settings used during training. Different architecture settings cause checkpoint size-mismatch errors.
+
+Open `RESULTS/<property>_results.csv` to compare measured and predicted values. For regression, a smaller MAE means a smaller average prediction error, but it must be interpreted with the property's units and range.
+
+### Step 6: Repeat with command-line arguments
+
+After recording a working interactive configuration, pass it directly:
+
+```powershell
+python train.py --property density --data_src CIF-DATA_NEW
+python evaluate.py --property density --data_src CIF-DATA_NEW
+python predict.py --property density --data_src my-samples
+```
+
+### Beginner checks
+
+- Run commands from `GATGNN/`, not the repository root.
+- Use numeric training CIF filenames matching the first CSV column exactly.
+- Confirm that the property checkpoint exists in `TRAINED/` before prediction.
+- Keep model options identical between training and evaluation.
+- Close `id_prop.csv` in Excel before running scripts.
+- Reduce batch size or use CPU when CUDA memory is insufficient.
+
+See the [root beginner workflow](../README_EN.md#usage-manuals) for the complete pipeline beginning with CHGNet optimization.

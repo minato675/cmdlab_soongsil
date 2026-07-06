@@ -175,16 +175,16 @@ DATA/train&evaluate/CIF-DATA_CMD/id_prop.csv
 기본 CMD 학습 예시:
 
 ```powershell
-python train.py --property density --data_src CMD
+python train.py --property density --data_src CIF-DATA_CMD
 ```
 
 현재 사용하는 물성별 예시:
 
 ```powershell
-python train.py --property thermal-conductivity --data_src CMD
-python train.py --property poisson-ratio --data_src CMD
-python train.py --property new_bulk-modulus --data_src CMD
-python train.py --property new_Youngs-modulus --data_src CMD
+python train.py --property thermal-conductivity --data_src CIF-DATA_CMD
+python train.py --property poisson-ratio --data_src CIF-DATA_CMD
+python train.py --property new_bulk-modulus --data_src CIF-DATA_CMD
+python train.py --property new_Youngs-modulus --data_src CIF-DATA_CMD
 ```
 
 NEW 사용자 정의 데이터 예시:
@@ -216,7 +216,7 @@ TRAINED/<property>.pt
 학습 때 사용한 옵션과 동일한 모델 구조 옵션을 사용해야 한다.
 
 ```powershell
-python evaluate.py --property density --data_src CMD
+python evaluate.py --property density --data_src CIF-DATA_CMD
 ```
 
 결과는 다음 위치에 저장된다.
@@ -230,7 +230,7 @@ CSV에는 material ID, 실제값, 예측값, 원자 수 및 데이터 인덱스�
 레이어 수나 attention 설정을 바꾸어 학습했다면 평가에도 그대로 전달한다.
 
 ```powershell
-python evaluate.py --property density --data_src CMD --num_layers 5 --global_attention cluster --cluster_option fixed
+python evaluate.py --property density --data_src CIF-DATA_CMD --num_layers 5 --global_attention cluster --cluster_option fixed
 ```
 
 모델 구조 옵션이 학습 때와 다르면 체크포인트 로딩 시 크기 불일치 오류가 발생한다.
@@ -256,7 +256,7 @@ python predict.py --property density --data_src prediction-directory --to_predic
 ### 기본 폴더에 있는 ID 하나 예측
 
 ```powershell
-python predict.py --property density --data_src CMD --to_predict 6794
+python predict.py --property density --data_src prediction-directory --to_predict 6794
 ```
 
 마지막 방식의 기본 경로는 `DATA/prediction/prediction-directory/6794.cif` 또는 `.cif.gz`이다.
@@ -323,10 +323,10 @@ CMD 밀도 모델의 한 사이클:
 cd GATGNN
 
 # 1. 학습
-python train.py --property density --data_src CMD
+python train.py --property density --data_src CIF-DATA_CMD
 
 # 2. 평가
-python evaluate.py --property density --data_src CMD
+python evaluate.py --property density --data_src CIF-DATA_CMD
 
 # 3. 새 CIF 일괄 예측
 python predict.py --property density --data_src prediction-directory
@@ -380,13 +380,134 @@ Excel이나 편집기에서 해당 `id_prop.csv`를 닫고 다시 실행한다.
 
 ## 사용 매뉴얼
 
-옵션 없이 실행하면 대화형 메뉴에서 물성 및 data source 폴더를 선택할 수 있다.
+### GATGNN에서 사용하는 용어
+
+- **property**: 모델이 학습하거나 예측할 물성이다. 예: 밀도, 열전도도, 포아송비.
+- **data source**: CIF를 용도별로 모은 폴더다. 학습용과 예측용 위치가 다르다.
+- **CIF ID**: 학습 CIF 파일명에 쓰는 숫자 식별자다. `1328.cif`의 ID는 `1328`이다.
+- **reference CSV**: 각 CIF ID의 정답 물성값을 적은 파일이다.
+- **checkpoint**: 학습된 모델 파라미터 파일이며 `TRAINED/<property>.pt`에 저장된다.
+- **epoch**: 전체 학습 데이터를 한 번 학습하는 단위다.
+
+### 1단계: 최초 환경 설치
+
+저장소 루트에서 한 번만 실행한다.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+새 PowerShell을 열었다면 저장소 루트에서 `.\.venv\Scripts\Activate.ps1`을 다시 실행한다. 이후 GATGNN 폴더로 이동한다.
 
 ```powershell
 cd GATGNN
-python train.py
-python evaluate.py
+```
+
+### 2단계: 기존 모델로 예측만 하기
+
+처음 사용하는 경우 가장 간단한 과정이다.
+
+1. 예측하려는 물성의 모델이 `TRAINED/`에 있는지 확인한다. 예를 들어 밀도는 `TRAINED/density.pt`가 필요하다.
+2. `DATA/prediction/` 아래에 작업 이름의 폴더를 만든다.
+3. 예측할 `.cif` 또는 `.cif.gz` 파일을 그 폴더에 넣는다.
+
+```text
+DATA/prediction/my-samples/
+├─ sample-a.cif
+└─ sample-b.cif
+```
+
+4. 대화형 예측을 실행한다.
+
+```powershell
 python predict.py
 ```
 
-CHGNet 구조 최적화부터 이어지는 전체 흐름은 [루트 사용 매뉴얼](../README.md#사용-매뉴얼)을 참고한다.
+5. 첫 질문에서 물성을 선택한다.
+6. 두 번째 질문에서 `my-samples`를 선택한다.
+7. 나머지 모델 옵션은 체크포인트가 기본 설정으로 학습되었다면 Enter를 누른다.
+8. `PREDICTIONS/pred_<property>_<data_src>_<target>.csv`를 열어 결과를 확인한다.
+
+예측 CSV의 기본 열:
+
+| 열 | 의미 |
+| --- | --- |
+| `material_id` | 확장자를 제외한 CIF 파일명 |
+| `prediction` | 모델이 예측한 물성값 |
+
+### 3단계: 학습 데이터 만들기
+
+새 모델을 학습할 때만 필요하다.
+
+1. `DATA/train&evaluate/` 아래에 data source 폴더를 만든다.
+2. 모든 학습 CIF 이름을 `<숫자 ID>.cif`로 지정한다. `cmd-1328.cif`, `sample.cif` 같은 이름은 사용할 수 없다.
+3. `DATA/properties-reference/`에 `<물성명>.csv`를 만든다.
+4. CSV에는 헤더 없이 `숫자 ID,물성값`을 적는다.
+
+```text
+DATA/train&evaluate/my-training-data/
+├─ 1328.cif
+├─ 1329.cif
+└─ atom_init.json
+```
+
+```csv
+1328,107.68
+1329,137.49
+```
+
+파일명 `my-property.csv`는 대화형 메뉴에서 `my-property`로 나타난다. 코드가 선택한 폴더의 실제 CIF ID와 CSV ID를 비교하고, 양쪽에 모두 존재하는 행만 `id_prop.csv`로 자동 생성한다.
+
+`atom_init.json`이 선택 폴더에 없으면 기존 기본 학습 폴더에서 자동 복사한다. 기본 파일도 없다면 먼저 유효한 `atom_init.json`을 준비해야 한다.
+
+### 4단계: 모델 학습
+
+```powershell
+python train.py
+```
+
+대화형 질문에 답한다.
+
+1. **property**: 학습할 CSV 물성을 선택한다.
+2. **data_src**: 방금 준비한 학습 data source를 선택한다.
+3. **num layers / neurons / heads**: 모델 크기다. 처음에는 Enter로 기본값을 사용한다.
+4. **attention 옵션**: 처음에는 기본값을 사용한다.
+5. **train size**: 학습에 사용할 비율이다. 기본값 `0.8`은 80%를 의미한다.
+
+학습 전 출력되는 `Selected ... matching samples`에서 예상한 데이터 수가 선택됐는지 확인한다. 학습 중에는 epoch별 학습·검증 손실이 출력된다. 완료된 모델은 `TRAINED/<property>.pt`에 저장된다.
+
+주의: 같은 property로 다시 학습하면 기존 체크포인트를 덮어쓸 수 있다. 중요한 모델은 실행 전에 복사해 둔다.
+
+### 5단계: 학습 모델 평가
+
+```powershell
+python evaluate.py
+```
+
+학습 때와 동일한 property, data source, layer, neuron, head 및 attention 설정을 선택한다. 설정이 다르면 체크포인트 크기 불일치 오류가 발생한다.
+
+완료 후 `RESULTS/<property>_results.csv`에서 실제값과 예측값을 비교한다. 회귀 모델에서는 터미널의 MAE가 작을수록 평균 예측 오차가 작다는 뜻이다. 단, 물성 단위와 데이터 범위를 함께 고려해 판단한다.
+
+### 6단계: 명령행 옵션으로 다시 실행하기
+
+대화형 설정을 기록해 두었다면 다음부터 옵션을 직접 전달할 수 있다.
+
+```powershell
+python train.py --property density --data_src CIF-DATA_NEW
+python evaluate.py --property density --data_src CIF-DATA_NEW
+python predict.py --property density --data_src my-samples
+```
+
+### 초보자가 자주 확인할 사항
+
+- 명령은 저장소 루트가 아니라 `GATGNN/`에서 실행한다.
+- 학습 CIF 이름은 숫자만 사용하고 CSV의 첫 열과 정확히 일치시킨다.
+- 예측할 property의 `.pt` 파일이 `TRAINED/`에 있는지 확인한다.
+- 학습과 평가의 모델 옵션을 동일하게 사용한다.
+- `id_prop.csv`를 Excel에서 열어 둔 채 실행하지 않는다.
+- CUDA 메모리 오류가 나면 batch size를 줄이거나 CPU 환경을 사용한다.
+
+CHGNet 최적화부터 이어지는 전체 과정은 [루트 초보자 사용 매뉴얼](../README.md#사용-매뉴얼)을 참고한다.
