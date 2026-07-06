@@ -1,11 +1,17 @@
 # evaluate.py
-# - Adds support for new_bulk-modulus, new_Youngs-modulus
-# - Uses prop_arg (CLI) for:
+# ✅ Added support for:
+#   - data_src CMD (DATA/CIF-DATA_CMD, CIF names: cmd-<id>.cif)
+#   - properties: density, thermal-conductivity
+#   - new_bulk-modulus, new_Youngs-modulus (aliased internally to new-property)
+# ✅ Uses prop_arg (CLI) for:
 #     * selecting the right properties-reference CSV via use_property()
 #     * loading/saving model/result filenames (TRAINED/{prop_arg}.pt, RESULTS/{prop_arg}_results.csv)
-# - Uses model_property (internal) for:
+# ✅ Uses model_property (internal) for:
 #     * set_model_properties()
 #     * METRICS()
+# ✅ Uses edge_src for graph/edge format:
+#     * CMD -> NEW (to avoid internal edge_format branching errors)
+# ✅ Makes labels numeric to avoid dtype=object issues
 
 import sys
 import argparse
@@ -31,9 +37,14 @@ parser.add_argument(
     '--property',
     default='bulk-modulus',
     choices=[
-        'absolute-energy','band-gap','bulk-modulus',
-        'fermi-energy','formation-energy',
-        'poisson-ratio','shear-modulus','new-property',
+        'absolute-energy', 'band-gap', 'bulk-modulus',
+        'fermi-energy', 'formation-energy',
+        'poisson-ratio', 'shear-modulus',
+        # ✅ new properties
+        'density',
+        'thermal-conductivity',
+        # internal key
+        'new-property',
         # ✅ added
         'new_bulk-modulus',
         'new_Youngs-modulus',
@@ -44,26 +55,26 @@ parser.add_argument(
 parser.add_argument(
     '--data_src',
     default='CGCNN',
-    choices=['CGCNN','MEGNET','NEW'],
+    choices=['CGCNN', 'MEGNET', 'NEW', 'CMD'],
     help='selection of the materials dataset to use (default: CGCNN)'
 )
 
 # MOST CRUCIAL MODEL PARAMETERS
-parser.add_argument('--num_layers',default=3, type=int,
+parser.add_argument('--num_layers', default=3, type=int,
                     help='number of AGAT layers to use in model (default:3)')
-parser.add_argument('--num_neurons',default=64, type=int,
+parser.add_argument('--num_neurons', default=64, type=int,
                     help='number of neurons to use per AGAT Layer(default:64)')
-parser.add_argument('--num_heads',default=4, type=int,
+parser.add_argument('--num_heads', default=4, type=int,
                     help='number of Attention-Heads to use  per AGAT Layer (default:4)')
-parser.add_argument('--use_hidden_layers',default=True, type=bool,
+parser.add_argument('--use_hidden_layers', default=True, type=bool,
                     help='option to use hidden layers following global feature summation (default:True)')
-parser.add_argument('--global_attention',default='composition', choices=['composition','cluster'],
+parser.add_argument('--global_attention', default='composition', choices=['composition', 'cluster'],
                     help='selection of the unpooling method (default:composition)')
-parser.add_argument('--cluster_option',default='fixed', choices=['fixed','random','learnable'],
+parser.add_argument('--cluster_option', default='fixed', choices=['fixed', 'random', 'learnable'],
                     help='selection of the cluster unpooling strategy (default: fixed)')
-parser.add_argument('--concat_comp',default=False, type=bool,
+parser.add_argument('--concat_comp', default=False, type=bool,
                     help='option to re-use vector of elemental composition (default: False)')
-parser.add_argument('--train_size',default=0.8, type=float,
+parser.add_argument('--train_size', default=0.8, type=float,
                     help='ratio size of the training-set (default:0.8)')
 
 args = parser.parse_args(sys.argv[1:])
@@ -81,8 +92,11 @@ model_property = MODEL_PROPERTY_ALIASES.get(prop_arg, prop_arg)
 
 data_src = args.data_src
 
+# ✅ edge/graph format routing (CMD -> NEW)
+edge_src = 'NEW' if data_src == 'CMD' else data_src
+
 # ✅ IMPORTANT:
-# - use_property must receive prop_arg so it loads newbulkmodulus.csv / newyoungsmodulus.csv
+# - use_property must receive prop_arg so it loads the correct properties-reference CSV
 # - model_property is used for model settings/metrics
 source_comparison, training_num, RSM = use_property(prop_arg, data_src)
 norm_action, classification = set_model_properties(model_property)
@@ -114,16 +128,27 @@ test_param    = {'batch_size': 256, 'shuffle': False}
 # -----------------------------
 # DATALOADER / TARGET NORMALIZATION
 # -----------------------------
-src_CIF = 'CIF-DATA_NEW' if data_src == 'NEW' else 'CIF-DATA'
+# ✅ data_src별 CIF 폴더 선택
+if data_src == 'CMD':
+    src_CIF = 'CIF-DATA_CMD'
+elif data_src == 'NEW':
+    src_CIF = 'CIF-DATA_NEW'
+else:
+    src_CIF = 'CIF-DATA'
 
-# ✅ prevent numeric IDs turning into floats
+# ✅ read id_prop.csv safely
 dataset = pd.read_csv(
     f'DATA/{src_CIF}/id_prop.csv',
+    header=None,
     names=['material_ids', 'label'],
     dtype={'material_ids': str}
 ).sample(frac=1, random_state=random_num)
 
-dataset['material_ids'] = dataset['material_ids'].str.strip().str.replace(r'\.0$', '', regex=True)
+dataset['material_ids'] = dataset['material_ids'].astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
+
+# ✅ label must be numeric (avoid dtype=object -> torch.tensor crash)
+dataset['label'] = pd.to_numeric(dataset['label'], errors='coerce')
+dataset = dataset.dropna(subset=['label'])
 
 NORMALIZER   = DATA_normalizer(dataset.label.values)
 CRYSTAL_DATA = CIF_Dataset(dataset, root_dir=f'DATA/{src_CIF}/', **RSM)
@@ -134,7 +159,8 @@ random.shuffle(idx_list)
 train_idx, test_val = train_test_split(idx_list, train_size=training_num, random_state=random_num)
 test_idx, _         = train_test_split(test_val, test_size=0.5, random_state=random_num)
 
-testing_set = CIF_Lister(test_idx, CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=data_src)
+# ✅ src는 edge_src로 (CMD면 NEW로)
+testing_set = CIF_Lister(test_idx, CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=edge_src)
 
 # -----------------------------
 # NEURAL-NETWORK
@@ -147,16 +173,16 @@ the_network = GATGNN(
     global_attention=global_att,
     unpooling_technique=attention_technique,
     concat_comp=concat_comp,
-    edge_format=data_src
+    edge_format=edge_src  # ✅ CMD면 NEW로
 )
 net = the_network.to(device)
 
 # LOSS & OPTIMIZER
 if classification == 1:
-    criterion = nn.CrossEntropyLoss().cuda()
+    criterion = nn.CrossEntropyLoss().to(device)  # ✅ cuda 고정 제거
     funct = torch_accuracy
 else:
-    criterion = nn.SmoothL1Loss().cuda()
+    criterion = nn.SmoothL1Loss().to(device)      # ✅ cuda 고정 제거
     funct = torch_MAE
 
 optimizer = optim.AdamW(net.parameters(), lr=learning_rate, weight_decay=1e-1)
@@ -164,7 +190,6 @@ optimizer = optim.AdamW(net.parameters(), lr=learning_rate, weight_decay=1e-1)
 # -----------------------------
 # LOADING MODEL
 # -----------------------------
-net = the_network.to(device)
 net.interpretation = True
 
 model_path = f'TRAINED/{prop_arg}.pt'  # ✅ load by CLI name
@@ -173,8 +198,10 @@ net.load_state_dict(torch.load(model_path, map_location=device))
 # METRICS-OBJECT INITIALIZATION (use internal key)
 metrics = METRICS(model_property, num_epochs, criterion, funct, device)
 
-print(f'> EVALUATING MODEL ...')
+print('> EVALUATING MODEL ...')
 print(f'> model: {model_path}')
+print(f'> data_src: {data_src} (edge_src: {edge_src})')
+print(f'> src_CIF: {src_CIF}')
 
 # TESTING PHASE
 test_loader = torch_DataLoader(dataset=testing_set, **test_param)
@@ -188,6 +215,7 @@ for data in test_loader:
     with torch.no_grad():
         predictions = net(data)
 
+    # data.y shape가 분류/회귀마다 다를 수 있어도 metrics가 처리
     print(f'(batch --- :{data.y.shape[0]:4})', '---', metrics.eval_func(predictions, data.y).item())
 
     true_label   = torch.cat([true_label, data.y.float()], dim=0)
@@ -223,6 +251,7 @@ csv_file = pd.DataFrame(
     ]
 )
 
+os.makedirs('RESULTS', exist_ok=True)
 out_csv = f'RESULTS/{prop_arg}_results.csv'
 csv_file.to_csv(out_csv, index=False)
 print(f'> Saved: {out_csv}')

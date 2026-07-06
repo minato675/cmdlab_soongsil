@@ -14,6 +14,7 @@ from gatgnn.pytorch_early_stopping import *
 from gatgnn.file_setter            import use_property
 from gatgnn.utils                  import *
 
+
 def _stem_cif_name(p: Path) -> str:
     """Return cif id stem for *.cif or *.cif.gz"""
     name = p.name
@@ -22,6 +23,7 @@ def _stem_cif_name(p: Path) -> str:
     if name.endswith(".cif"):
         return name[:-4]  # remove .cif
     return p.stem
+
 
 def resolve_targets(to_predict: str):
     """
@@ -58,6 +60,10 @@ parser.add_argument(
         'absolute-energy', 'band-gap', 'bulk-modulus',
         'fermi-energy', 'formation-energy',
         'poisson-ratio', 'shear-modulus',
+        # ✅ new properties
+        'density',
+        'thermal-conductivity',
+        # internal key
         'new-property',
         # ✅ added
         'new_bulk-modulus',
@@ -69,14 +75,14 @@ parser.add_argument(
 parser.add_argument(
     '--data_src',
     default='CGCNN',
-    choices=['CGCNN', 'MEGNET', 'NEW'],
+    choices=['CGCNN', 'MEGNET', 'NEW', 'CMD'],
     help='selection of the materials dataset to use (default: CGCNN)'
 )
 
 # ✅ to_predict: id OR path-to-cif OR path-to-directory
 parser.add_argument(
     '--to_predict',
-    default='mp-1',
+    default='DATA/prediction-directory',
     help="cif id (without extension) OR a .cif/.cif.gz file path OR a directory path (predict all CIFs in it)"
 )
 
@@ -114,7 +120,10 @@ model_property = MODEL_PROPERTY_ALIASES.get(prop_arg, prop_arg)
 
 data_src = args.data_src
 
-# ✅ NEW 두 물성은 file_setter가 각각 newbulkmodulus.csv / newyoungsmodulus.csv를 읽도록
+# ✅ 그래프/엣지 포맷은 기존 분기(NEW)로 태우고, 데이터셋 준비는 CMD로 처리
+edge_src = 'NEW' if data_src == 'CMD' else data_src
+
+# ✅ file_setter에서 CMD / density / thermalconductivity까지 id_prop.csv 세팅되도록
 _, _, RSM = use_property(prop_arg, data_src, True)
 norm_action, classification = set_model_properties(model_property)
 
@@ -146,14 +155,26 @@ dataset['material_ids'] = [str(x).strip() for x in material_ids]
 dataset['label']        = [0.00001] * len(dataset)  # dummy label
 NORMALIZER              = DATA_normalizer(dataset.label.values)
 
-src_CIF = 'CIF-DATA_NEW' if data_src == 'NEW' else 'CIF-DATA'
+# ✅ data_src별 CIF 폴더 선택 (학습 때와 동일 규칙)
+if data_src == 'CMD':
+    src_CIF = 'CIF-DATA_CMD'
+elif data_src == 'NEW':
+    src_CIF = 'CIF-DATA_NEW'
+else:
+    src_CIF = 'CIF-DATA'
+
 CRYSTAL_DATA = CIF_Dataset(dataset, root_dir=f'DATA/{src_CIF}/', **RSM)
 
 # ✅ prediction directory override (file/dir/id)
 CRYSTAL_DATA.root_dir = predict_root_dir
 
 test_idx    = list(range(len(dataset)))
-testing_set = CIF_Lister(test_idx, CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=data_src)
+
+# ✅ 내부 src 분기를 모를 수 있으니 edge_src를 사용 (CMD면 NEW로)
+testing_set = CIF_Lister(
+    test_idx, CRYSTAL_DATA, NORMALIZER, norm_action,
+    df=dataset, src=edge_src
+)
 
 # -----------------------------
 # Network
@@ -166,16 +187,16 @@ the_network = GATGNN(
     global_attention=global_att,
     unpooling_technique=attention_technique,
     concat_comp=concat_comp,
-    edge_format=data_src
+    edge_format=edge_src  # ✅ CMD면 NEW로
 )
 net = the_network.to(device)
 
 # LOSS & OPTIMIZER (optimizer는 예측엔 사실상 불필요하지만 구조 유지)
 if classification == 1:
-    criterion = nn.CrossEntropyLoss().cuda()
+    criterion = nn.CrossEntropyLoss().to(device)  # ✅ cuda 고정 제거
     funct = torch_accuracy
 else:
-    criterion = nn.SmoothL1Loss().cuda()
+    criterion = nn.SmoothL1Loss().to(device)      # ✅ cuda 고정 제거
     funct = torch_MAE
 optimizer = optim.AdamW(net.parameters(), lr=learning_rate, weight_decay=1e-1)
 
@@ -191,7 +212,11 @@ print(f'> model: {model_path}')
 print(f'> root_dir: {predict_root_dir}')
 print(f'> num_targets: {len(dataset)}')
 
-# TESTING PHASE
+# -----------------------------
+# Prediction + CSV save
+# -----------------------------
+results = []  # ✅ only material_id / prediction
+
 test_loader = torch_DataLoader(dataset=testing_set, **test_param)
 net.eval()
 
@@ -201,11 +226,28 @@ with torch.no_grad():
         batch = batch.to(device)
         pred = net(batch)
 
-        # pred shape 방어: (B,1) or (B,) 등
+        # 회귀: (B,1) or (B,) 대응
         pred_flat = pred.view(-1).detach().cpu().numpy()
 
         for i, val in enumerate(pred_flat):
             mid = dataset['material_ids'].iloc[offset + i]
-            print(f'> {prop_arg} of material ({mid}.cif) = {float(val):.6f}')
+            v = float(val)
+
+            print(f'> {prop_arg} of material ({mid}.cif) = {v:.6f}')
+
+            # ✅ accumulate minimal output
+            results.append([mid, v])
 
         offset += len(pred_flat)
+
+# ✅ write minimal csv
+out_dir = Path("PREDICTIONS")
+out_dir.mkdir(parents=True, exist_ok=True)
+
+tag = Path(args.to_predict).stem if Path(args.to_predict).exists() else str(args.to_predict)
+out_path = out_dir / f"pred_{prop_arg}_{data_src}_{tag}.csv"
+
+df_out = pd.DataFrame(results, columns=["material_id", "prediction"])
+df_out.to_csv(out_path, index=False, encoding="utf-8-sig")
+
+print(f"\n> Saved predictions to: {out_path}\n")

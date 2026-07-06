@@ -11,15 +11,34 @@ from   tabulate import tabulate
 import random,time
 
 def set_model_properties(crystal_property):
-    if crystal_property   in ['poisson-ratio','band-gap','absolute-energy','fermi-energy','formation-energy','new-property']        :
-        norm_action   = None;classification = None
+    # ✅ 회귀(로그 변환 안 하는) 케이스
+    if crystal_property in [
+        'poisson-ratio', 'band-gap',
+        'absolute-energy', 'fermi-energy', 'formation-energy',
+        'new-property', 'density', 'thermal-conductivity',
+    ]:
+        norm_action = None
+        classification = None
+
+    # # ✅ 회귀(로그 변환 사용하는) 케이스 - 명시 추가
+    # elif crystal_property in ['density', 'thermal-conductivity']:
+    #     norm_action = 'log'
+    #     classification = None
+
+    # ✅ 분류 케이스
     elif crystal_property == 'is_metal':
-        norm_action   = 'classification-1';classification = 1
+        norm_action = 'classification-1'
+        classification = 1
     elif crystal_property == 'is_not_metal':
-        norm_action   = 'classification-0';classification = 1
-    else:    
-        norm_action   = 'log';classification = None
-    return norm_action,classification
+        norm_action = 'classification-0'
+        classification = 1
+
+    # ✅ 그 외 회귀 기본값(기존 bulk/shear 등)
+    else:
+        norm_action = 'log'
+        classification = None
+
+    return norm_action, classification
 
 def torch_MAE(tensor1,tensor2):
     return torch.mean(torch.abs(tensor1-tensor2))

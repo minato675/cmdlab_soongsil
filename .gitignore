@@ -1,6 +1,57 @@
-/GATGNN/DATA
+# CHGNet generated structure data
+/chgnet/Element/
+/chgnet/opt_cif/
+
+# GATGNN datasets: keep only the reference properties in Git
+/GATGNN/DATA/*
+
+# Keep prediction/output directory shells, but ignore generated contents
+!/GATGNN/DATA/prediction-directory/
+/GATGNN/DATA/prediction-directory/*
+!/GATGNN/DATA/prediction-directory/.gitkeep
+/GATGNN/PREDICTIONS/*
+!/GATGNN/PREDICTIONS/.gitkeep
+/GATGNN/RESULTS/*
+!/GATGNN/RESULTS/.gitkeep
+
 .chgnet/
 .venv/
 venv/
 __pycache__/
 *.pyc
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+
+# C extensions
+cygraph.c
+*.so
+
+# Distribution / packaging
+build/
+dist/
+sdist/
+*.egg-info/
+
+# Unit test / coverage reports
+.coverage
+coverage.xml
+
+# Extras
+*.traj
+*.xml
+*.csv
+*.pt
+*.p
+.DS_Store
+.idea
+.ipynb_checkpoints
+bond_graph_error.cif
+test.py
+
+# Training logs
+wandb/
+
+# These project-specific exceptions must follow the generic file rules above
+!/GATGNN/DATA/properties-reference/
+!/GATGNN/DATA/properties-reference/**

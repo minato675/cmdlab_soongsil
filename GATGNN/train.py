@@ -3,6 +3,15 @@
 #   --property new_bulk-modulus
 #   --property new_Youngs-modulus
 # Both map internally to "new-property" but keep saved model filenames as the CLI name.
+#
+# ✅ Added support for:
+#   --data_src CMD  (custom CIF folder: DATA/CIF-DATA_CMD, CIF names: cmd-<id>.cif)
+#   --property density
+#   --property thermal-conductivity
+# ✅ For CMD:
+#   - use_property(prop_arg, "CMD") writes DATA/CIF-DATA_CMD/id_prop.csv with cmd- prefix
+#   - edge_format uses "NEW" to stay compatible with internal edge parsing branches
+#   - CIF loader root_dir points to DATA/CIF-DATA_CMD/
 
 import sys
 import argparse
@@ -38,6 +47,9 @@ def main(argv):
             'absolute-energy', 'band-gap', 'bulk-modulus',
             'fermi-energy', 'formation-energy',
             'poisson-ratio', 'shear-modulus',
+            # ✅ 추가 물성
+            'density',
+            'thermal-conductivity',
             # internal key (kept for backward compatibility)
             'new-property',
             # ✅ your preferred CLI keys
@@ -50,7 +62,7 @@ def main(argv):
     parser.add_argument(
         '--data_src',
         default='CGCNN',
-        choices=['CGCNN', 'MEGNET', 'NEW'],
+        choices=['CGCNN', 'MEGNET', 'NEW', 'CMD'],
         help='selection of the materials dataset to use (default: CGCNN)'
     )
 
@@ -79,22 +91,29 @@ def main(argv):
     # CLI name -> internal name used by GATGNN (file_setter / set_model_properties)
     # -----------------------------
     prop_arg = args.property
-    
+
     MODEL_PROPERTY_ALIASES = {
         "new_bulk-modulus": "new-property",
         "new_Youngs-modulus": "new-property",
     }
 
     model_property = MODEL_PROPERTY_ALIASES.get(prop_arg, prop_arg)
-    #crystal_property = PROPERTY_ALIASES.get(prop_arg, prop_arg)
 
     data_src = args.data_src
+
+    # ✅ 그래프/엣지 포맷은 기존 분기(NEW)로 태우고, 데이터셋 준비는 CMD로 처리
+    # (CMD라는 edge_format을 내부에서 모를 가능성 대비)
+    edge_src = 'NEW' if data_src == 'CMD' else data_src
 
     # -----------------------------
     # GATGNN --- parameters
     # -----------------------------
+    # ✅ 데이터셋 준비는 실제 data_src로 (CMD면 use_property에서 CIF-DATA_CMD/id_prop.csv 생성)
     source_comparison, training_num, RSM = use_property(prop_arg, data_src)
-    norm_action, classification          = set_model_properties(model_property)
+
+    # ✅ 모델 내부 분기용 property는 alias 반영
+    norm_action, classification = set_model_properties(model_property)
+
     if training_num is None:
         training_num = args.train_size
 
@@ -131,21 +150,32 @@ def main(argv):
     # -----------------------------
     # DATALOADER/ TARGET NORMALIZATION
     # -----------------------------
-    src_CIF  = 'CIF-DATA_NEW' if data_src == 'NEW' else 'CIF-DATA'
-    dataset  = pd.read_csv(f'DATA/{src_CIF}/id_prop.csv', names=['material_ids', 'label']).sample(
-        frac=1, random_state=random_num
-    )
-    NORMALIZER   = DATA_normalizer(dataset.label.values)
+    # ✅ data_src별 CIF 폴더 선택
+    if data_src == 'CMD':
+        src_CIF = 'CIF-DATA_CMD'
+    elif data_src == 'NEW':
+        src_CIF = 'CIF-DATA_NEW'
+    else:
+        src_CIF = 'CIF-DATA'
 
+    dataset = pd.read_csv(
+        f'DATA/{src_CIF}/id_prop.csv',
+        header=None,
+        names=['material_ids', 'label']
+    ).sample(frac=1, random_state=random_num)
+
+    NORMALIZER   = DATA_normalizer(dataset.label.values)
     CRYSTAL_DATA = CIF_Dataset(dataset, root_dir=f'DATA/{src_CIF}/', **RSM)
-    idx_list     = list(range(len(dataset)))
+
+    idx_list = list(range(len(dataset)))
     random.shuffle(idx_list)
 
     train_idx, test_val = train_test_split(idx_list, train_size=training_num, random_state=random_num)
     _, val_idx          = train_test_split(test_val, test_size=0.5, random_state=random_num)
 
-    training_set   = CIF_Lister(train_idx, CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=data_src)
-    validation_set = CIF_Lister(val_idx,   CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=data_src)
+    # ✅ CMD도 데이터셋 로딩은 가능하지만, 내부 src 분기를 모를 수 있어 edge_src를 사용
+    training_set   = CIF_Lister(train_idx, CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=edge_src)
+    validation_set = CIF_Lister(val_idx,   CRYSTAL_DATA, NORMALIZER, norm_action, df=dataset, src=edge_src)
 
     # -----------------------------
     # NEURAL-NETWORK
@@ -158,18 +188,19 @@ def main(argv):
         global_attention=global_att,
         unpooling_technique=attention_technique,
         concat_comp=concat_comp,
-        edge_format=data_src
+        edge_format=edge_src  # ✅ CMD면 NEW로, 나머지는 그대로
     )
     net = the_network.to(device)
 
     # -----------------------------
     # LOSS & OPTIMIZER & SCHEDULER
     # -----------------------------
+    # ✅ criterion도 device에 맞춰 이동 (cuda 고정 제거)
     if classification == 1:
-        criterion = nn.CrossEntropyLoss().cuda()
+        criterion = nn.CrossEntropyLoss().to(device)
         funct     = torch_accuracy
     else:
-        criterion = nn.SmoothL1Loss().cuda()
+        criterion = nn.SmoothL1Loss().to(device)
         funct     = torch_MAE
 
     optimizer = optim.AdamW(net.parameters(), lr=learning_rate, weight_decay=1e-1)
@@ -195,7 +226,7 @@ def main(argv):
     # -----------------------------
     # TRAIN LOOP
     # -----------------------------
-    print(f'> TRAINING MODEL ...')
+    print('> TRAINING MODEL ...')
     train_loader = torch_DataLoader(dataset=training_set, **train_param)
     valid_loader = torch_DataLoader(dataset=validation_set, **valid_param)
 
@@ -247,7 +278,7 @@ def main(argv):
         if early_stopping.FLAG is True:
             estop_val = flag_value
         else:
-            estop_val = '@best: saving model...'
+            estop_val  = '@best: saving model...'
             best_epoch = epoch + 1
 
         output_training(metrics, epoch, estop_val, f'{e_time:.1f} sec.')
@@ -260,9 +291,8 @@ def main(argv):
     # SAVING MODEL
     # Save filename uses the CLI name (prop_arg), so your commands work as-is.
     # -----------------------------
-    print(f"> DONE TRAINING !")
+    print("> DONE TRAINING !")
     shutil.copy2('TRAINED/crystal-checkpoint.pt', f'TRAINED/{prop_arg}.pt')
-
 
 
 if __name__ == "__main__":
