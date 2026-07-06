@@ -2,6 +2,23 @@
 
 [한국어](README.md) | [English](README_EN.md)
 
+## 목차
+
+- [주요 폴더](#1-주요-폴더)
+- [실행 환경](#2-실행-환경)
+- [지원 물성과 파일명](#3-지원-물성과-파일명)
+- [데이터 소스 규칙](#4-데이터-소스-규칙)
+- [학습 데이터 준비](#5-학습-데이터-준비)
+- [모델 학습](#6-모델-학습)
+- [모델 평가](#7-모델-평가)
+- [새로운 CIF 물성 예측](#8-새로운-cif-물성-예측)
+- [CIF 부피 계산](#9-cif-부피-계산)
+- [주요 명령 옵션](#10-주요-명령-옵션)
+- [권장 전체 작업 순서](#11-권장-전체-작업-순서)
+- [문제 해결](#12-문제-해결)
+- [실행 체크리스트](#13-실행-체크리스트)
+- [사용 매뉴얼](#사용-매뉴얼)
+
 이 폴더에서는 CIF 결정 구조와 물성 CSV를 이용해 GATGNN 모델을 학습하고, 학습 모델을 평가하거나 새로운 CIF의 물성을 예측한다.
 
 현재 작업 흐름은 다음과 같다.
@@ -30,10 +47,10 @@
 
 ## 2. 실행 환경
 
-모든 명령은 상대 경로를 사용하므로 반드시 `C:\work\GATGNN`에서 실행한다.
+모든 명령은 상대 경로를 사용하므로 저장소 루트의 `GATGNN/`에서 실행한다.
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 ```
 
 필수 Python 패키지는 다음과 같다.
@@ -303,7 +320,7 @@ PREDICTIONS/volume_prediction-directory.csv
 CMD 밀도 모델의 한 사이클:
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 
 # 1. 학습
 python train.py --property density --data_src CMD
@@ -328,7 +345,7 @@ python volume_predict.py --to_predict DATA\prediction\prediction-directory
 
 - 모든 학습 CIF가 `<숫자 ID>.cif` 형식인지 확인한다.
 - 예측 ID 방식은 선택한 `DATA/prediction/<data_src>/<ID>.cif`를 찾는다.
-- 명령을 `C:\work\GATGNN`에서 실행했는지 확인한다.
+- 명령을 저장소 루트의 `GATGNN/`에서 실행했는지 확인한다.
 
 ### `Permission denied ... id_prop.csv`
 
@@ -352,7 +369,7 @@ Excel이나 편집기에서 해당 `id_prop.csv`를 닫고 다시 실행한다.
 
 ## 13. 실행 체크리스트
 
-- [ ] `C:\work\GATGNN`에서 명령 실행
+- [ ] 저장소 루트의 `GATGNN/`에서 명령 실행
 - [ ] 물성명과 참조 CSV 파일명 확인
 - [ ] 참조 CSV ID와 CIF 파일명 대응 확인
 - [ ] `atom_init.json` 확인
@@ -360,3 +377,16 @@ Excel이나 편집기에서 해당 `id_prop.csv`를 닫고 다시 실행한다.
 - [ ] 학습과 평가·예측의 모델 옵션 일치
 - [ ] `RESULTS/` 평가값 검토
 - [ ] `PREDICTIONS/` 예측 결과 검토
+
+## 사용 매뉴얼
+
+옵션 없이 실행하면 대화형 메뉴에서 물성 및 data source 폴더를 선택할 수 있다.
+
+```powershell
+cd GATGNN
+python train.py
+python evaluate.py
+python predict.py
+```
+
+CHGNet 구조 최적화부터 이어지는 전체 흐름은 [루트 사용 매뉴얼](../README.md#사용-매뉴얼)을 참고한다.

@@ -2,6 +2,18 @@
 
 [한국어](README.md) | [English](README_EN.md)
 
+## Table of contents
+
+- [Directory layout](#1-directory-layout)
+- [Set up the environment](#2-set-up-the-environment)
+- [Prepare input CIF files](#3-prepare-input-cif-files)
+- [Run structure optimization](#4-run-structure-optimization)
+- [Current optimization settings](#5-current-optimization-settings)
+- [Validate the results](#6-validate-the-results)
+- [Troubleshooting](#7-troubleshooting)
+- [Checklist](#8-checklist)
+- [Usage manual](#usage-manual)
+
 This directory uses a pretrained CHGNet model to relax multiple CIF structures in a batch.
 
 ```text
@@ -27,7 +39,7 @@ Input structures and generated results are kept out of Git because they can beco
 Python 3.10 or newer is required. The following example creates a virtual environment and installs this local CHGNet package in editable mode.
 
 ```powershell
-cd C:\work
+# Run from the repository root
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -44,7 +56,7 @@ When using CUDA, make sure the installed PyTorch build supports the local CUDA e
 
 ## 3. Prepare input CIF files
 
-Place all `.cif` files to optimize in `C:\work\chgnet\Element`.
+Place all `.cif` files to optimize in the repository's `chgnet/Element/` directory.
 
 ```text
 chgnet/
@@ -62,7 +74,7 @@ The script processes only `.cif` files directly inside `Element`. It does not se
 The script uses relative paths, so run it from the `chgnet` directory.
 
 ```powershell
-cd C:\work\chgnet
+cd chgnet
 python optimizer.py
 ```
 
@@ -120,7 +132,7 @@ Count input and output files in PowerShell:
 
 ### `FileNotFoundError: Element`
 
-The script was probably launched outside `C:\work\chgnet`. Change to that directory and try again.
+The script was probably launched outside `chgnet/`. From the repository root, run `cd chgnet` and try again.
 
 ### Package import error
 
@@ -139,6 +151,15 @@ The script processes one structure at a time. If memory is still insufficient, s
 - [ ] Activate the virtual environment
 - [ ] Place input CIF files in `Element/`
 - [ ] Back up existing `opt_cif/` results if needed
-- [ ] Run `python optimizer.py` from `C:\work\chgnet`
+- [ ] Run `python optimizer.py` from the repository's `chgnet/` directory
 - [ ] Compare input and output file counts
 - [ ] Review optimized structures and logs
+
+## Usage manual
+
+See the [root usage manuals](../README_EN.md#usage-manuals) for installation and the complete CHGNet-to-GATGNN workflow. The minimum CHGNet command is:
+
+```powershell
+cd chgnet
+python optimizer.py
+```

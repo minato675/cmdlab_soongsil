@@ -2,6 +2,23 @@
 
 [한국어](README.md) | [English](README_EN.md)
 
+## Table of contents
+
+- [Main directories](#1-main-directories)
+- [Runtime environment](#2-runtime-environment)
+- [Supported properties and filenames](#3-supported-properties-and-filenames)
+- [Dataset source conventions](#4-dataset-source-conventions)
+- [Prepare training data](#5-prepare-training-data)
+- [Train a model](#6-train-a-model)
+- [Evaluate a model](#7-evaluate-a-model)
+- [Predict properties for new CIF files](#8-predict-properties-for-new-cif-files)
+- [Calculate CIF volumes](#9-calculate-cif-volumes)
+- [Important command options](#10-important-command-options)
+- [Recommended end-to-end workflow](#11-recommended-end-to-end-workflow)
+- [Troubleshooting](#12-troubleshooting)
+- [Checklist](#13-checklist)
+- [Usage manual](#usage-manual)
+
 This directory trains GATGNN models from CIF crystal structures and property CSV files, evaluates trained models, and predicts properties for new CIF structures.
 
 ```text
@@ -28,10 +45,10 @@ Only the three directories above belong at the DATA root. Property CSV files are
 
 ## 2. Runtime environment
 
-All scripts use relative paths. Run every command from `C:\work\GATGNN`.
+All scripts use relative paths. Run every command from the repository's `GATGNN/` directory.
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 ```
 
 Required Python packages include:
@@ -301,7 +318,7 @@ Use `--out_dir` to select another output directory.
 One complete CMD density cycle:
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 
 # 1. Train
 python train.py --property density --data_src CMD
@@ -326,7 +343,7 @@ Provide `atom_init.json` in the selected training source or in a default source 
 
 - Every training CIF must follow `<numeric ID>.cif`.
 - ID-based prediction looks in the selected `DATA/prediction/<data_src>/<ID>.cif`.
-- Confirm that the command is running from `C:\work\GATGNN`.
+- Confirm that the command is running from the repository's `GATGNN/` directory.
 
 ### `Permission denied ... id_prop.csv`
 
@@ -350,7 +367,7 @@ The reference CSV must have two columns and no header. Check for extra commas an
 
 ## 13. Checklist
 
-- [ ] Run commands from `C:\work\GATGNN`
+- [ ] Run commands from the repository's `GATGNN/` directory
 - [ ] Confirm the property name and reference CSV filename
 - [ ] Match every reference ID with a CIF filename
 - [ ] Confirm that `atom_init.json` exists
@@ -358,3 +375,16 @@ The reference CSV must have two columns and no header. Check for extra commas an
 - [ ] Use identical model options for training, evaluation, and prediction
 - [ ] Review evaluation output in `RESULTS/`
 - [ ] Review prediction output in `PREDICTIONS/`
+
+## Usage manual
+
+Run the scripts without arguments to select a property and data-source directory through the interactive menu.
+
+```powershell
+cd GATGNN
+python train.py
+python evaluate.py
+python predict.py
+```
+
+See the [root usage manuals](../README_EN.md#usage-manuals) for the complete workflow beginning with CHGNet optimization.

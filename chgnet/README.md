@@ -2,6 +2,18 @@
 
 [한국어](README.md) | [English](README_EN.md)
 
+## 목차
+
+- [폴더 구성](#1-폴더-구성)
+- [실행 환경 준비](#2-실행-환경-준비)
+- [입력 CIF 준비](#3-입력-cif-준비)
+- [구조 최적화 실행](#4-구조-최적화-실행)
+- [현재 최적화 조건](#5-현재-최적화-조건)
+- [결과 확인](#6-결과-확인)
+- [자주 발생하는 문제](#7-자주-발생하는-문제)
+- [작업 체크리스트](#8-작업-체크리스트)
+- [사용 매뉴얼](#사용-매뉴얼)
+
 이 폴더에서는 사전 학습된 CHGNet 모델로 여러 CIF 구조를 일괄 완화(relaxation)한다.
 
 현재 작업 흐름은 다음과 같다.
@@ -29,7 +41,7 @@ Element/*.cif
 Python 3.10 이상이 필요하다. 저장소 루트에서 가상환경을 만들고 CHGNet을 editable 모드로 설치하는 예시는 다음과 같다.
 
 ```powershell
-cd C:\work
+# 저장소 루트에서 실행
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -46,7 +58,7 @@ CUDA를 사용하는 경우에는 설치된 PyTorch가 현재 CUDA 환경을 지
 
 ## 3. 입력 CIF 준비
 
-최적화할 `.cif` 파일을 `C:\work\chgnet\Element`에 넣는다.
+최적화할 `.cif` 파일을 저장소 루트의 `chgnet/Element/`에 넣는다.
 
 ```text
 chgnet/
@@ -64,7 +76,7 @@ chgnet/
 상대 경로를 사용하므로 반드시 `chgnet` 폴더에서 실행한다.
 
 ```powershell
-cd C:\work\chgnet
+cd chgnet
 python optimizer.py
 ```
 
@@ -122,7 +134,7 @@ relaxer = StructOptimizer(optimizer_class="BFGS")
 
 ### `FileNotFoundError: Element`
 
-`C:\work\chgnet`이 아닌 다른 위치에서 실행했을 가능성이 크다. `cd C:\work\chgnet` 후 다시 실행한다.
+`chgnet/`이 아닌 다른 위치에서 실행했을 가능성이 크다. 저장소 루트에서 `cd chgnet` 후 다시 실행한다.
 
 ### 패키지 import 오류
 
@@ -141,6 +153,15 @@ CIF 문법, 원소 기호, 점유율 또는 비정상적인 격자 정보를 확
 - [ ] 가상환경 활성화
 - [ ] `Element/`에 입력 CIF 배치
 - [ ] 기존 `opt_cif/` 결과 백업 여부 확인
-- [ ] `C:\work\chgnet`에서 `python optimizer.py` 실행
+- [ ] 저장소 루트의 `chgnet/`에서 `python optimizer.py` 실행
 - [ ] 입력/출력 파일 수 비교
 - [ ] 최적화 구조 및 계산 로그 검토
+
+## 사용 매뉴얼
+
+저장소 전체 설치와 CHGNet→GATGNN 연계 흐름은 [루트 사용 매뉴얼](../README.md#사용-매뉴얼)을 참고한다. CHGNet만 실행하는 최소 명령은 다음과 같다.
+
+```powershell
+cd chgnet
+python optimizer.py
+```

@@ -2,7 +2,35 @@
 
 [한국어](README.md) | [English](README_EN.md)
 
+## 목차
+
+- [가상환경 및 설치](#가상환경-및-설치)
+- [프로젝트 구성](#프로젝트-구성)
+- [전체 작업 흐름](#전체-작업-흐름)
+- [GATGNN 모델 학습과 평가](#gatgnn-모델-학습과-평가)
+- [Git 관리 정책](#git-관리-정책)
+- [빠른 체크리스트](#빠른-체크리스트)
+- [사용 매뉴얼](#사용-매뉴얼)
+
 이 저장소는 CIF 결정 구조를 CHGNet으로 최적화하고, GATGNN으로 재료 물성을 학습·평가·예측하기 위한 통합 작업 환경이다.
+
+아래의 모든 경로와 명령은 저장소를 clone한 뒤 저장소 루트에 위치한 상태를 기준으로 한다. 사용자별 절대 경로는 사용하지 않는다.
+
+## 가상환경 및 설치
+
+Python 3.10~3.12 환경에서 루트 `requirements.txt`로 두 프로젝트의 검증된 최소 의존성을 설치한다.
+
+```powershell
+# 저장소 루트에서 실행
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+기본 설치는 CPU용 PyTorch를 선택할 수 있다. NVIDIA GPU를 사용하려면 PyTorch 공식 설치 방식으로 CUDA 호환 빌드를 설치한 뒤 나머지 요구사항을 설치한다.
+
+각 스크립트는 상대 경로를 사용한다. 실행 전에 반드시 해당 프로젝트 폴더로 이동한다.
 
 ```text
 원본 CIF
@@ -27,7 +55,7 @@
 최적화할 CIF 파일을 `chgnet/Element/`에 넣고 실행한다.
 
 ```powershell
-cd C:\work\chgnet
+cd chgnet
 python optimizer.py
 ```
 
@@ -40,7 +68,7 @@ python optimizer.py
 최적화된 CIF 중 물성을 예측할 파일을 `GATGNN/DATA/prediction/<data_src>/`에 복사한다.
 
 ```powershell
-Copy-Item C:\work\chgnet\opt_cif\*.cif C:\work\GATGNN\DATA\prediction\prediction-directory\
+Copy-Item .\chgnet\opt_cif\*.cif .\GATGNN\DATA\prediction\prediction-directory\
 ```
 
 원본 CIF를 그대로 예측하려는 경우에는 원하는 CIF를 해당 폴더에 직접 넣어도 된다.
@@ -50,7 +78,7 @@ Copy-Item C:\work\chgnet\opt_cif\*.cif C:\work\GATGNN\DATA\prediction\prediction
 학습된 모델을 선택해 예측을 실행한다.
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 python predict.py --property density --data_src prediction-directory
 ```
 
@@ -70,7 +98,7 @@ python predict.py --property new_Youngs-modulus --data_src CMD --to_predict DATA
 ### 4. 필요 시 CIF 부피 계산
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 python volume_predict.py --to_predict DATA\prediction-directory
 ```
 
@@ -81,7 +109,7 @@ python volume_predict.py --to_predict DATA\prediction-directory
 새 모델을 학습하려면 대응하는 CIF와 물성 CSV를 먼저 준비한다.
 
 ```powershell
-cd C:\work\GATGNN
+cd GATGNN
 python train.py --property density --data_src CMD
 python evaluate.py --property density --data_src CMD
 ```
@@ -92,22 +120,6 @@ python evaluate.py --property density --data_src CMD
 - 평가 결과: `GATGNN/RESULTS/<property>_results.csv`
 
 데이터 형식과 지원 물성명은 [GATGNN 상세 매뉴얼](GATGNN/README.md)을 참고한다.
-
-## 실행 환경
-
-Python 3.10~3.12 환경에서 루트 `requirements.txt`로 두 프로젝트의 검증된 최소 의존성을 설치한다.
-
-```powershell
-cd C:\work
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-기본 설치는 CPU용 PyTorch를 선택할 수 있다. NVIDIA GPU를 사용하려면 PyTorch 공식 설치 방식으로 CUDA 호환 빌드를 설치한 뒤 나머지 요구사항을 설치한다.
-
-각 스크립트는 상대 경로를 사용한다. 실행 전에 반드시 해당 프로젝트 폴더로 이동한다.
 
 ## Git 관리 정책
 
@@ -125,13 +137,13 @@ python -m pip install -r requirements.txt
 
 - [ ] 사용할 Python 가상환경 활성화
 - [ ] `chgnet/Element/`에 원본 CIF 배치
-- [ ] `C:\work\chgnet`에서 구조 최적화 실행
+- [ ] 저장소 루트의 `chgnet/`에서 구조 최적화 실행
 - [ ] 최적화 결과를 GATGNN 예측 폴더로 복사
 - [ ] 필요한 `TRAINED/<property>.pt` 모델 확인
-- [ ] `C:\work\GATGNN`에서 물성 예측 실행
+- [ ] 저장소 루트의 `GATGNN/`에서 물성 예측 실행
 - [ ] `PREDICTIONS/`의 결과 CSV 검토
 
-## 상세 문서
+## 사용 매뉴얼
 
 - [CHGNet 구조 최적화 매뉴얼](chgnet/README.md)
 - [GATGNN 학습·평가·예측 매뉴얼](GATGNN/README.md)
